@@ -1,0 +1,34 @@
+{
+  "name": "annatel_server",
+  "version": "1.0.0",
+  "description": "Annatel watch's server",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "rm -rf dist && babel src -d dist && node dist/app",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "author": "Hillel Saal & Gabriel Elbaz",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.13",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validate.js": "^0.13.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/runtime": "^7.7.6",
+    "@shelf/jest-mongodb": "^1.1.3",
+    "@types/jest": "^24.0.23",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0"
+  }
+}
