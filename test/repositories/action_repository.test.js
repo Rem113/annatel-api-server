@@ -23,7 +23,7 @@ describe("getActions", () => {
       length: 100,
       actionType: "LK"
     };
-    await Action.create(newAction);
+    const dbAction = await Action.create(newAction);
     const actionRepository = ActionRepository({ actionModel: Action });
 
     // Act
@@ -32,7 +32,7 @@ describe("getActions", () => {
     // Assert
     expect(result).not.toEqual([]);
     expect(result.length).toBe(1);
-    expect(result[0]._id).toBeDefined();
+    expect(result[0]._id).toEqual(dbAction._id);
     expect(result[0].vendor).toEqual("3G");
     expect(result[0].length).toBe(100);
     expect(result[0].actionType).toEqual("LK");

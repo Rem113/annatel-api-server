@@ -20,4 +20,19 @@ router.get(
   }
 );
 
+router.get(
+  "/type/:type",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const actionType = req.params.type;
+
+    const actionRepository = ActionRepository({ actionModel: Action });
+    const actionService = ActionService({ repository: actionRepository });
+
+    const actions = await actionService.getActionsByType(actionType);
+
+    return res.status(200).json(actions);
+  }
+);
+
 export default router;
