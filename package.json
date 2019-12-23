@@ -4,7 +4,8 @@
   "description": "Annatel watch's server",
   "main": "dist/app.js",
   "scripts": {
-    "start": "rm -rf dist && babel src -d dist && node dist/app",
+    "build": "rm -rf dist && babel src -d dist",
+    "start": "node dist/app",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
