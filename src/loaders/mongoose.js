@@ -6,4 +6,6 @@ export default async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
+
+  console.log("Mongoose initialized");
 };

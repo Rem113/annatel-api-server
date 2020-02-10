@@ -8,4 +8,6 @@ export default app => {
   app.use("/api/action", actionRoutes);
 
   app.listen(Keys.expressPort);
+
+  console.log("Express initialized");
 };
