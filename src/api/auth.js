@@ -7,14 +7,14 @@ import AuthService from "../services/auth_service";
 
 const router = Router();
 
+const authRepository = AuthRepository({ userModel: User });
+const authService = AuthService({
+  repository: authRepository,
+  validation: validateUser
+});
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
-  const authRepository = AuthRepository({ userModel: User });
-  const authService = AuthService({
-    repository: authRepository,
-    validation: validateUser
-  });
 
   const result = await authService.login({ email, password });
 
@@ -25,12 +25,6 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
-
-  const authRepository = AuthRepository({ userModel: User });
-  const authService = AuthService({
-    repository: authRepository,
-    validation: validateUser
-  });
 
   const result = await authService.register({ email, password });
 

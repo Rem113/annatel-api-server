@@ -7,14 +7,23 @@ import ActionService from "../services/action_service";
 
 const router = Router();
 
+const actionRepository = ActionRepository({ actionModel: Action });
+const actionService = ActionService({ repository: actionRepository });
+
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const actionRepository = ActionRepository({ actionModel: Action });
-    const actionService = ActionService({ repository: actionRepository });
+    const { date } = req.params;
 
-    const actions = await actionService.getActions();
+    let actions;
+
+    if (date) {
+      actions = await actionService.getActionsAfterDate(date);
+      return res.status(200).json(actions);
+    }
+
+    actions = await actionService.getActions();
 
     return res.status(200).json(actions);
   }
@@ -25,9 +34,6 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const actionType = req.params.type;
-
-    const actionRepository = ActionRepository({ actionModel: Action });
-    const actionService = ActionService({ repository: actionRepository });
 
     const actions = await actionService.getActionsByType(actionType);
 
