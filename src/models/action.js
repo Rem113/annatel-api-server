@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+import mongoose, { Schema } from "mongoose";
 
 const Action = new Schema({
   vendor: {
@@ -28,4 +27,4 @@ const Action = new Schema({
   }
 });
 
-module.exports = mongoose.model("Action", Action, "Actions");
+export default mongoose.model("Action", Action, "Actions");

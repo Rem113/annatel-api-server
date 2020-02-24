@@ -5,5 +5,5 @@ export default ({ userModel }) =>
       if (!user) return null;
       return user;
     },
-    createUser: async user => await userModel.create(user)
+    createUser: user => userModel.create(user)
   });
