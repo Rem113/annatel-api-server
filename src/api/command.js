@@ -21,7 +21,7 @@ router.post(
         commandService.createLKCommand(id);
         return res.status(201);
       default:
-        return res.status(404).json({ message: "Action type unsupported" });
+        return res.status(400).json({ message: "Action type unsupported" });
     }
   }
 );

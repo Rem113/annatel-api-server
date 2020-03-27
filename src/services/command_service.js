@@ -12,6 +12,8 @@ export default ({ commandRepository }) =>
         })
       };
 
-      commandRepository.create(command).catch(err => console.error(err));
+      commandRepository
+        .create(command)
+        .catch(err => console.error(`[${new Date().toLocaleString()}]`, err));
     }
   });
