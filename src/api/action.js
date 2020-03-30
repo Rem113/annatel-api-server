@@ -41,4 +41,18 @@ router.get(
   }
 );
 
+router.get(
+  "/id/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const watchId = req.params.id;
+
+    const actions = await actionService.getActionsByWatchId(watchId);
+
+    console.log(actions);
+
+    return res.status(200).json(actions);
+  }
+);
+
 export default router;

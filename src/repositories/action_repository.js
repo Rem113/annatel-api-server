@@ -4,5 +4,6 @@ export default ({ actionModel }) =>
     getActions: () => actionModel.find(),
     getActionsAfterDate: date =>
       actionModel.find({ insertedAt: { $gte: new Date(date) } }),
-    getActionsByType: actionType => actionModel.find({ actionType })
+    getActionsByType: actionType => actionModel.find({ actionType }),
+    getActionsByWatchId: watchId => actionModel.find({ watchId })
   });
