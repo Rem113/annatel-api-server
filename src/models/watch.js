@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 
 const Watch = new Schema({
-  id: {
-    type: Schema.Types.ObjectId,
+  watchId: {
+    type: String,
     required: true
   }
 });
