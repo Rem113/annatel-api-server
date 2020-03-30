@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const Watch = new Schema({
   id: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true
   }
 });
