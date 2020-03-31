@@ -2,12 +2,16 @@ import { Router } from "express";
 import passport from "passport";
 
 import Action from "../models/action";
+import Watch from "../models/watch";
 import ActionRepository from "../repositories/action_repository";
 import ActionService from "../services/action_service";
 
 const router = Router();
 
-const actionRepository = ActionRepository({ actionModel: Action });
+const actionRepository = ActionRepository({
+  actionModel: Action,
+  watchModel: Watch
+});
 const actionService = ActionService({ repository: actionRepository });
 
 router.get(
@@ -48,8 +52,6 @@ router.get(
     const watchId = req.params.id;
 
     const actions = await actionService.getActionsByWatchId(watchId);
-
-    console.log(actions);
 
     return res.status(200).json(actions);
   }
