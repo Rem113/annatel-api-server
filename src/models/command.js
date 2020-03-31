@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const Command = new Schema({
   watchId: {
-    type: Schema.Types.String,
+    ref: "Watch",
     required: true
   },
   command: {
