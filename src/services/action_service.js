@@ -1,30 +1,55 @@
+// TODO: Handle errors
+
 /**
  * Action related functionalities
- * @param {ActionRepository} repository
- * @returns {ActionService}
+ * @param {ActionRepository} actionRepository
+ * @param {WatchRepository} watchRepository
  */
-export default ({ repository }) =>
-  Object.freeze({
-    /**
-     * @returns {Array<Action>}
-     */
-    getActions: () => repository.getActions(),
+export default class ActionService {
+  constructor({ actionRepository, watchRepository }) {
+    this.actionRepository = actionRepository;
+    this.watchRepository = watchRepository;
+  }
 
-    /**
-     * @param {Date} date
-     * @returns {Array<Action>}
-     */
-    getActionsAfterDate: date => repository.getActionsAfterDate(date),
+  /**
+   * @param {ObjectId} userId
+   * @returns {Array<Action>}
+   */
+  async getActionsByUserId(userId) {
+    const watches = await this.watchRepository.getUsersWatches(userId);
 
-    /**
-     * @param {String} actionType
-     * @returns {Array<Action>}
-     */
-    getActionsByType: actionType => repository.getActionsByType(actionType),
+    const res = [];
 
-    /**
-     * @param {String} watchId
-     * @returns {Array<Action>}
-     */
-    getActionsByWatchId: watchId => repository.getActionsByWatchId(watchId)
-  });
+    for await (const watch of watches) {
+      const actions = await this.actionRepository.getActionsByWatchId(
+        watch.watchId
+      );
+
+      actions.forEach(action => res.push(action));
+    }
+
+    return res;
+  }
+
+  /**
+   * @param {Date} date
+   * @param {ObjectId} userId
+   * @returns {Array<Action>}
+   */
+  async getActionsAfterDate(date, userId) {
+    const actions = await this.getActionsByUserId(userId);
+
+    return actions.filter(action => action.insertedAt > date);
+  }
+
+  /**
+   * @param {String} actionType
+   * @param {ObjectId} userId
+   * @returns {Array<Action>}
+   */
+  async getActionsByType(actionType, userId) {
+    const actions = await this.getActionsByUserId(userId);
+
+    return actions.filter(action => action.actionType === actionType);
+  }
+}

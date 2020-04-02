@@ -17,7 +17,10 @@ const watchRepository = WatchRepository({
   watchModel: Watch,
   userToWatchModel: UserToWatch
 });
-const watchService = WatchService({ watchRepository, userToWatchRepository });
+const watchService = new WatchService({
+  watchRepository,
+  userToWatchRepository
+});
 
 const router = Router();
 
