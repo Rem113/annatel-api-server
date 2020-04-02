@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
+// TODO: Validate
 const Action = new Schema({
   actionType: {
     type: Schema.Types.String,

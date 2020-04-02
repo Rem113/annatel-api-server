@@ -14,6 +14,8 @@ const commandService = CommandService({ commandRepository, watchRepository });
 
 const router = Router();
 
+// TODO: Implement
+// TODO: Document
 router.post(
   "/:id/:action",
   passport.authenticate("jwt", { session: false }),

@@ -1,3 +1,4 @@
+// TODO: Document
 export default ({ userToWatchModel }) =>
   Object.freeze({
     linkWatchToUser: async (userId, watchId) => {

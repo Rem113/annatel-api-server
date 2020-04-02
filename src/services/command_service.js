@@ -1,5 +1,6 @@
 import { objectToString } from "annatel-watch-parser";
 
+// TODO: Document
 const validateParams = (actionsType, params) => {
   const objParams = new Object(params);
 

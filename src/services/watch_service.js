@@ -4,6 +4,7 @@ import {
   ConflictingResourceFailure
 } from "../core/failures/failures";
 
+// TODO: Document
 export default ({ watchRepository, userToWatchRepository }) =>
   Object.freeze({
     createWatch: async watch => {

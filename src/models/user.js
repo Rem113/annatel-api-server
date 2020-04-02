@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
+// TODO: Validate
 const User = new Schema({
   email: {
     type: Schema.Types.String,

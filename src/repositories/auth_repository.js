@@ -1,3 +1,4 @@
+// TODO: Document
 export default ({ userModel }) =>
   Object.freeze({
     findUserByEmail: async email => {

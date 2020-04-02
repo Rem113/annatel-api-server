@@ -14,6 +14,8 @@ const actionRepository = ActionRepository({
 });
 const actionService = ActionService({ repository: actionRepository });
 
+// TODO: Document
+// TODO: Get actions based on the user
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),

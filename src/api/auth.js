@@ -13,6 +13,7 @@ const authService = AuthService({
   validation: validateUser
 });
 
+// TODO: Document
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 

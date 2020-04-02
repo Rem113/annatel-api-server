@@ -1,3 +1,4 @@
+// TODO: Document
 export default ({ repository }) =>
   Object.freeze({
     getActions: () => repository.getActions(),

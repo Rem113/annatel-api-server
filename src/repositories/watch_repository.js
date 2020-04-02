@@ -1,3 +1,4 @@
+// TODO: Document
 export default ({ watchModel, userToWatchModel }) =>
   Object.freeze({
     createWatch: watch => watchModel.create(watch),

@@ -5,6 +5,7 @@ import RegisterModel from "../core/models/register_model";
 import LoginModel from "../core/models/login_model";
 import Keys from "../config/keys";
 
+// TODO: Document
 export default ({ repository, validation }) =>
   Object.freeze({
     login: async user => {

@@ -1,3 +1,4 @@
+// TODO: Document
 export default ({ actionModel, watchModel }) =>
   Object.freeze({
     createAction: action => actionModel.create(action),

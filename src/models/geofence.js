@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
+// TODO: Validate
 const TimeFrame = new Schema({
   dayOfWeek: {
     required: true,
