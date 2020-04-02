@@ -1,9 +1,12 @@
 /**
  * Database logic related to UserToWatch
- * @param {Model<UserToWatch>} userToWatchModel
  */
-export default class UserToWatchRepository {
-  constructor({ userToWatchModel }) {
+class UserToWatchRepository {
+  /**
+   * @param {Model<UserToWatch>} userToWatchModel
+   *
+   */
+  constructor(userToWatchModel) {
     this.userToWatchModel = userToWatchModel;
   }
 
@@ -21,3 +24,5 @@ export default class UserToWatchRepository {
     return this.userToWatchModel.create(link);
   }
 }
+
+export default userToWatchModel;

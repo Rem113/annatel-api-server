@@ -7,12 +7,13 @@ import { InvalidInputFailure } from "../core/failures";
 
 /**
  * Auth functionnalities
- * @param {UserRepository} userRepository
- * @param {UserValidator} validation
- * @returns {AuthService}
  */
-export default class AuthService {
-  constructor({ userRepository, validation }) {
+class AuthService {
+  /**
+   * @param {UserRepository} userRepository
+   * @param {UserValidator} validation
+   */
+  constructor(userRepository, validation) {
     this.userRepository = userRepository;
     this.validation = validation;
   }
@@ -83,3 +84,5 @@ export default class AuthService {
     }
   }
 }
+
+export default AuthService;

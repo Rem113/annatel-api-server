@@ -1,9 +1,11 @@
 /**
  * Database logic related to the Users
- * @param {Model<User>} userModel
  */
-export default class UserRepository {
-  constructor({ userModel }) {
+class UserRepository {
+  /**
+   * @param {Model<User>} userModel
+   */
+  constructor(userModel) {
     this.userModel = userModel;
   }
 
@@ -23,3 +25,5 @@ export default class UserRepository {
     return await this.userModel.create(user);
   }
 }
+
+export default UserRepository;

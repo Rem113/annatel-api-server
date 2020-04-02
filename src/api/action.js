@@ -10,15 +10,9 @@ import ActionService from "../services/action_service";
 
 const router = Router();
 
-const actionRepository = new ActionRepository({
-  actionModel: Action,
-  watchModel: Watch
-});
-const watchRepository = new WatchRepository({
-  watchModel: Watch,
-  userToWatchModel: UserToWatch
-});
-const actionService = new ActionService({ actionRepository, watchRepository });
+const actionRepository = new ActionRepository(Action, Watch);
+const watchRepository = new WatchRepository(Watch, UserToWatch);
+const actionService = new ActionService(actionRepository, watchRepository);
 
 // TODO: Document
 router.get(

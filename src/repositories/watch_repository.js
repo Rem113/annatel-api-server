@@ -1,10 +1,13 @@
 /**
  * Database logic related to Watches
+ */
+class WatchRepository {
+  /**
+   
  * @param {Model<Watch>} watchModel
  * @param {Model<UserToWatch>} userToWatchModel
- */
-export default class WatchRepository {
-  constructor({ watchModel, userToWatchModel }) {
+   */
+  constructor(watchModel, userToWatchModel) {
     this.watchModel = watchModel;
     this.userToWatchModel = userToWatchModel;
   }
@@ -51,3 +54,5 @@ export default class WatchRepository {
     return res;
   }
 }
+
+export default WatchRepository;

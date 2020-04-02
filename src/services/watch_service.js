@@ -7,10 +7,12 @@ import {
 
 /**
  * Watch related functionalities
- * @param {WatchRepository} watchRepository
- * @param {UserToWatchRepository} userToWatchRepository
  */
-export default class WatchService {
+class WatchService {
+  /**
+   * @param {WatchRepository} watchRepository
+   * @param {UserToWatchRepository} userToWatchRepository
+   */
   constructor({ watchRepository, userToWatchRepository }) {
     this.watchRepository = watchRepository;
     this.userToWatchRepository = userToWatchRepository;
@@ -75,3 +77,5 @@ export default class WatchService {
     }
   }
 }
+
+export default WatchService;

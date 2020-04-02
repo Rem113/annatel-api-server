@@ -8,12 +8,9 @@ import CommandService from "../services/command_service";
 import Watch from "../models/watch";
 import WatchRepository from "../repositories/watch_repository";
 
-const commandRepository = new CommandRepository({ commandModel: Command });
-const watchRepository = new WatchRepository({ watchModel: Watch });
-const commandService = new CommandService({
-  commandRepository,
-  watchRepository
-});
+const commandRepository = new CommandRepository(Command);
+const watchRepository = new WatchRepository(Watch);
+const commandService = new CommandService(commandRepository, watchRepository);
 
 const router = Router();
 

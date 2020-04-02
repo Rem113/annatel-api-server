@@ -8,11 +8,8 @@ import { InternalFailure, InvalidInputFailure } from "../core/failures";
 
 const router = Router();
 
-const userRepository = new UserRepository({ userModel: User });
-const authService = new AuthService({
-  userRepository,
-  validation: validateUser
-});
+const userRepository = new UserRepository(User);
+const authService = new AuthService(userRepository, validateUser);
 
 /**
  * ROUTE:       /login

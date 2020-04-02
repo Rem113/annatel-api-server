@@ -52,9 +52,11 @@ const mapActionToObject = (watch, actionType, params) => {
   };
 };
 
-export default class CommandService {
-  constructor({ commandRepository, watchRepository }) {
+class CommandService {
+  constructor(commandRepository, watchRepository) {
     this.commandRepository = commandRepository;
     this.watchRepository = watchRepository;
   }
 }
+
+export default CommandService;

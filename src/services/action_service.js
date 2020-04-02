@@ -2,11 +2,13 @@
 
 /**
  * Action related functionalities
- * @param {ActionRepository} actionRepository
- * @param {WatchRepository} watchRepository
  */
-export default class ActionService {
-  constructor({ actionRepository, watchRepository }) {
+class ActionService {
+  /**
+   * @param {ActionRepository} actionRepository
+   * @param {WatchRepository} watchRepository
+   */
+  constructor(actionRepository, watchRepository) {
     this.actionRepository = actionRepository;
     this.watchRepository = watchRepository;
   }
@@ -53,3 +55,5 @@ export default class ActionService {
     return actions.filter(action => action.actionType === actionType);
   }
 }
+
+export default ActionService;

@@ -1,6 +1,6 @@
 // TODO: Document
-export default class CommandRepository {
-  constructor({ commandModel }) {
+class CommandRepository {
+  constructor(commandModel) {
     this.commandModel = commandModel;
   }
 
@@ -8,3 +8,5 @@ export default class CommandRepository {
     return await this.commandModel.create(command);
   }
 }
+
+export default CommandRepository;

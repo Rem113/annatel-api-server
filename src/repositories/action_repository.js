@@ -1,10 +1,12 @@
 /**
  * Database logic related to Actions
- * @param {Model<Action>} actionModel
- * @param {Model<Watch>} watchModel
  */
-export default class ActionRepository {
-  constructor({ actionModel, watchModel }) {
+class ActionRepository {
+  /**
+   * @param {Model<Action>} actionModel
+   * @param {Model<Watch>} watchModel
+   */
+  constructor(actionModel, watchModel) {
     this.actionModel = actionModel;
     this.watchModel = watchModel;
   }
@@ -50,3 +52,5 @@ export default class ActionRepository {
     return this.actionModel.find({ watchId: watch._id });
   }
 }
+
+export default ActionRepository;

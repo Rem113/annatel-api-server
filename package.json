@@ -8,7 +8,7 @@
     "start": "node dist/app",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "doc": "jsdoc src/api src/repositories"
+    "doc": "jsdoc src/api src/repositories src/services"
   },
   "author": "Hillel Saal & Gabriel Elbaz",
   "license": "ISC",
