@@ -7,6 +7,10 @@ import UserToWatchRepository from "../repositories/user_to_watch_repository";
 import Watch from "../models/watch";
 import WatchRepository from "../repositories/watch_repository";
 import WatchService from "../services/watch_service";
+import {
+  MissingFieldFailure,
+  ConflictingResourceFailure
+} from "../core/failures/failures";
 
 const userToWatchRepository = UserToWatchRepository({
   userToWatchModel: UserToWatch
@@ -35,14 +39,25 @@ router.post(
     const result = await watchService.createWatch(req.body);
 
     return result.fold(
-      err =>
-        res.status(400).json({
-          error: {
-            type: typeof err,
-            message: err.message,
-            payload: err.payload
-          }
-        }),
+      err => {
+        if (err instanceof MissingFieldFailure) {
+          return res.status(400).json({
+            error: {
+              type: "Missing field",
+              message: err.message,
+              payload: err.payload
+            }
+          });
+        } else if (err instanceof ConflictingResourceFailure) {
+          return res.status(409).json({
+            error: {
+              type: "Conflict",
+              message: err.message,
+              payload: err.payload
+            }
+          });
+        }
+      },
       watch => res.status(201).json(watch)
     );
   }
@@ -65,7 +80,7 @@ router.get(
       err =>
         res.status(400).json({
           error: {
-            type: typeof err,
+            type: "Unknown",
             message: err.message,
             payload: err.payload
           }
@@ -95,7 +110,7 @@ router.post(
       err =>
         res.status(400).json({
           error: {
-            type: typeof err,
+            type: "Unknown",
             message: err.message,
             payload: err.payload
           }

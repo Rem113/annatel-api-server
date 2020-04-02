@@ -1,5 +1,8 @@
 import { Either } from "monet";
-import AuthFailure from "../core/failures/auth_failure";
+import {
+  MissingFieldFailure,
+  ConflictingResourceFailure
+} from "../core/failures/failures";
 
 export default ({ watchRepository, userToWatchRepository }) =>
   Object.freeze({
@@ -9,16 +12,22 @@ export default ({ watchRepository, userToWatchRepository }) =>
 
       if (!hasWatchIdProperty || !hasVendorProperty)
         return Either.left(
-          new AuthFailure("Please fill all the fields", {
+          new MissingFieldFailure("Please fill all the fields", {
             hasWatchIdProperty,
             hasVendorProperty
           })
         );
 
-      // TODO: Check for duplicate watch
-      // TODO: Catch errors
-      const watchDocument = await watchRepository.createWatch(watch);
+      // Check for duplicate watch
+      const exists = await watchRepository.getWatchByWatchId(watch.watchId);
+      if (exists)
+        return Either.left(
+          new ConflictingResourceFailure(
+            "There is already a watch with the specified id"
+          )
+        );
 
+      const watchDocument = await watchRepository.createWatch(watch);
       return Either.right(watchDocument);
     },
     getUsersWatches: async userId => {
