@@ -14,14 +14,14 @@ export default class ActionRepository {
    * @returns {Action} The created Action
    */
   async createAction(action) {
-    return await actionModel.create(action);
+    return await this.actionModel.create(action);
   }
 
   /**
    * @returns {Array<Action>}
    */
   async getActions() {
-    return await actionModel.find();
+    return await this.actionModel.find();
   }
 
   /**
@@ -29,7 +29,7 @@ export default class ActionRepository {
    * @returns {Array<Action>}
    */
   async getActionsAfterDate(date) {
-    return await actionModel.find({ insertedAt: { $gte: date } });
+    return await this.actionModel.find({ insertedAt: { $gte: date } });
   }
 
   /**
@@ -37,7 +37,7 @@ export default class ActionRepository {
    * @returns {Array<Action>}
    */
   async getActionsByType(actionType) {
-    return await actionModel.find({ actionType });
+    return await this.actionModel.find({ actionType });
   }
 
   /**
@@ -47,6 +47,6 @@ export default class ActionRepository {
   async getActionsByWatchId(watchId) {
     const watch = await watchModel.findOne({ watchId });
 
-    return actionModel.find({ watchId: watch._id });
+    return this.actionModel.find({ watchId: watch._id });
   }
 }

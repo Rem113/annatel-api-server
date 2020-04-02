@@ -1,19 +1,25 @@
 /**
  * Database logic related to the Users
  * @param {Model<User>} userModel
- * @returns {UserRepository}
  */
-export default ({ userModel }) =>
-  Object.freeze({
-    /**
-     * @param {String} email
-     * @returns {User?}
-     */
-    findUserByEmail: email => userModel.findOne({ email }),
+export default class UserRepository {
+  constructor({ userModel }) {
+    this.userModel = userModel;
+  }
 
-    /**
-     * @param {Object} user
-     * @returns {User} The created User
-     */
-    createUser: user => userModel.create(user)
-  });
+  /**
+   * @param {String} email
+   * @returns {User?}
+   */
+  async findUserByEmail(email) {
+    return await this.userModel.findOne({ email });
+  }
+
+  /**
+   * @param {Object} user
+   * @returns {User} The created User
+   */
+  async createUser(user) {
+    return await this.userModel.create(user);
+  }
+}

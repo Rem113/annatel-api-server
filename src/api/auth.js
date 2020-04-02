@@ -8,7 +8,7 @@ import { InternalFailure, InvalidInputFailure } from "../core/failures";
 
 const router = Router();
 
-const userRepository = UserRepository({ userModel: User });
+const userRepository = new UserRepository({ userModel: User });
 const authService = new AuthService({
   userRepository,
   validation: validateUser

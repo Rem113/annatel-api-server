@@ -2,43 +2,52 @@
  * Database logic related to Watches
  * @param {Model<Watch>} watchModel
  * @param {Model<UserToWatch>} userToWatchModel
- * @returns {WatchRepository}
  */
-export default ({ watchModel, userToWatchModel }) =>
-  Object.freeze({
-    /**
-     * @param {Object} watch
-     * @returns {Watch} The created Watch
-     */
-    createWatch: watch => watchModel.create(watch),
+export default class WatchRepository {
+  constructor({ watchModel, userToWatchModel }) {
+    this.watchModel = watchModel;
+    this.userToWatchModel = userToWatchModel;
+  }
 
-    /**
-     * @param {ObjectId} id
-     * @returns {Watch}
-     */
-    getWatchById: id => watchModel.findById(id),
+  /**
+   * @param {Object} watch
+   * @returns {Watch} The created Watch
+   */
+  async createWatch(watch) {
+    return this.watchModel.create(watch);
+  }
 
-    /**
-     * @param {String} watchId
-     * @returns {Watch}
-     */
-    getWatchByWatchId: watchId => watchModel.findOne({ watchId }),
+  /**
+   * @param {ObjectId} id
+   * @returns {Watch}
+   */
+  async getWatchById(id) {
+    return this.watchModel.findById(id);
+  }
 
-    /**
-     * Returns the watches associated to a certain user
-     * @param {ObjectId} userId
-     * @returns {Array<Watch>}
-     */
-    getUsersWatches: async userId => {
-      const usersWatches = await userToWatchModel.find({ user: userId });
+  /**
+   * @param {String} watchId
+   * @returns {Watch}
+   */
+  async getWatchByWatchId(watchId) {
+    return this.watchModel.findOne({ watchId });
+  }
 
-      const res = [];
+  /**
+   * Returns the watches associated to a certain user
+   * @param {ObjectId} userId
+   * @returns {Array<Watch>}
+   */
+  async getUsersWatches(userId) {
+    const usersWatches = await this.userToWatchModel.find({ user: userId });
 
-      for await (const userToWatch of usersWatches) {
-        const temp = await watchModel.findById(userToWatch.watch);
-        res.push(temp);
-      }
+    const res = [];
 
-      return res;
+    for await (const userToWatch of usersWatches) {
+      const temp = await this.watchModel.findById(userToWatch.watch);
+      res.push(temp);
     }
-  });
+
+    return res;
+  }
+}

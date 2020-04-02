@@ -14,7 +14,7 @@ const actionRepository = new ActionRepository({
   actionModel: Action,
   watchModel: Watch
 });
-const watchRepository = WatchRepository({
+const watchRepository = new WatchRepository({
   watchModel: Watch,
   userToWatchModel: UserToWatch
 });

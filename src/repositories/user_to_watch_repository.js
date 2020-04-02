@@ -1,21 +1,23 @@
 /**
  * Database logic related to UserToWatch
  * @param {Model<UserToWatch>} userToWatchModel
- * @returns {UserToWatchRepository}
  */
-export default ({ userToWatchModel }) =>
-  Object.freeze({
-    /**
-     * @param {ObjectId} userId
-     * @param {ObjectId} watchId
-     * @returns {UserToWatch}
-     */
-    linkWatchToUser: async (userId, watchId) => {
-      const link = { user: userId, watch: watchId };
-      const exists = await userToWatchModel.findOne(link);
+export default class UserToWatchRepository {
+  constructor({ userToWatchModel }) {
+    this.userToWatchModel = userToWatchModel;
+  }
 
-      if (exists) throw "The watch is already linked";
+  /**
+   * @param {ObjectId} userId
+   * @param {ObjectId} watchId
+   * @returns {UserToWatch}
+   */
+  async linkWatchToUser(userId, watchId) {
+    const link = { user: userId, watch: watchId };
+    const exists = await this.userToWatchModel.findOne(link);
 
-      return userToWatchModel.create(link);
-    }
-  });
+    if (exists) throw "The watch is already linked";
+
+    return this.userToWatchModel.create(link);
+  }
+}

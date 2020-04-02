@@ -8,8 +8,8 @@ import CommandService from "../services/command_service";
 import Watch from "../models/watch";
 import WatchRepository from "../repositories/watch_repository";
 
-const commandRepository = CommandRepository({ commandModel: Command });
-const watchRepository = WatchRepository({ watchModel: Watch });
+const commandRepository = new CommandRepository({ commandModel: Command });
+const watchRepository = new WatchRepository({ watchModel: Watch });
 const commandService = new CommandService({
   commandRepository,
   watchRepository

@@ -9,11 +9,11 @@ import WatchRepository from "../repositories/watch_repository";
 import WatchService from "../services/watch_service";
 import { InvalidInputFailure, ConflictFailure } from "../core/failures";
 
-const userToWatchRepository = UserToWatchRepository({
+const userToWatchRepository = new UserToWatchRepository({
   userToWatchModel: UserToWatch
 });
 
-const watchRepository = WatchRepository({
+const watchRepository = new WatchRepository({
   watchModel: Watch,
   userToWatchModel: UserToWatch
 });
