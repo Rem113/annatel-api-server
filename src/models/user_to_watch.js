@@ -5,9 +5,9 @@ const UserToWatch = new Schema({
     type: Schema.Types.Date,
     default: Date.now
   },
-  stoppedAt: {
-    type: Schema.Types.Date,
-    default: null
+  stopped: {
+    type: Schema.Types.Boolean,
+    default: false
   },
   updatedAt: {
     type: Schema.Types.Date,

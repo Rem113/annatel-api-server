@@ -41,9 +41,9 @@ const Geofence = new Schema({
     required: true,
     type: Schema.Types.Decimal128
   },
-  stoppedAt: {
-    default: null,
-    type: Schema.Types.Date
+  stopped: {
+    default: false,
+    type: Schema.Types.Boolean
   },
   updatedAt: {
     default: Date.now,

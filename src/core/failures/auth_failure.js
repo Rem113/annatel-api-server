@@ -1,6 +1,4 @@
-import Failure from "./failure";
-
-export default class AuthFailure extends Failure {
+export default class AuthFailure {
   constructor(message, payload) {
     this.message = message;
     this.payload = payload;
