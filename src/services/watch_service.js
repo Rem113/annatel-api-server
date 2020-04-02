@@ -1,8 +1,5 @@
 import { Either } from "monet";
-import {
-  MissingFieldFailure,
-  ConflictingResourceFailure
-} from "../core/failures/failures";
+import { InvalidInputFailure, ConflictFailure } from "../core/failures";
 
 // TODO: Document
 export default ({ watchRepository, userToWatchRepository }) =>
@@ -13,7 +10,7 @@ export default ({ watchRepository, userToWatchRepository }) =>
 
       if (!hasWatchIdProperty || !hasVendorProperty)
         return Either.left(
-          new MissingFieldFailure("Please fill all the fields", {
+          new InvalidInputFailure("Please fill all the fields", {
             hasWatchIdProperty,
             hasVendorProperty
           })
@@ -23,9 +20,7 @@ export default ({ watchRepository, userToWatchRepository }) =>
       const exists = await watchRepository.getWatchByWatchId(watch.watchId);
       if (exists)
         return Either.left(
-          new ConflictingResourceFailure(
-            "There is already a watch with the specified id"
-          )
+          new ConflictFailure("There is already a watch with the specified id")
         );
 
       const watchDocument = await watchRepository.createWatch(watch);
@@ -45,9 +40,7 @@ export default ({ watchRepository, userToWatchRepository }) =>
         );
         return Either.right(link);
       } catch (e) {
-        return Either.left(
-          new ConflictingResourceFailure("The watch is already linked")
-        );
+        return Either.left(new ConflictFailure("The watch is already linked"));
       }
     }
   });

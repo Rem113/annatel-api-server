@@ -1,71 +1,81 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import RegisterModel from "../core/models/register_model";
-import LoginModel from "../core/models/login_model";
 import Keys from "../config/keys";
+import { Either } from "monet";
+import { InvalidInputFailure } from "../core/failures";
 
-// TODO: Document
+/**
+ * Auth functionnalities
+ * @param {UserRepository} repository
+ * @param {UserValidator} validation
+ * @returns {AuthService}
+ */
 export default ({ repository, validation }) =>
   Object.freeze({
+    /**
+     * @param {Object} user
+     * @returns {Either<Failure, AuthToken>}
+     */
     login: async user => {
+      // Validate input
       const errors = validation(user);
 
-      if (errors) return LoginModel({ isLoggedIn: false, errors });
+      if (errors)
+        return Either.left(new InvalidInputFailure("Invalid input", errors));
 
+      // Check if the user exists
       const dbUser = await repository.findUserByEmail(user.email);
 
       if (!dbUser)
-        return LoginModel({
-          isLoggedIn: false,
-          errors: {
-            email: "There is no user associated to this email"
-          }
-        });
+        return Either.left(
+          new InvalidInputFailure("There is no user associated to this email")
+        );
 
+      // Compare the passwords
       const valid = await bcrypt.compare(user.password, dbUser.password);
 
-      if (!valid)
-        return LoginModel({
-          isLoggedIn: false,
-          errors: { password: "Password is incorrect" }
-        });
+      if (!valid) return;
+      Either.left(new InvalidInputFailure("Password is incorrect"));
 
+      // Builds the token
       const payload = { id: dbUser._id, email: dbUser.email };
       const token = jwt.sign(payload, Keys.secretOrKey, { expiresIn: 3600 });
 
-      return LoginModel({ isLoggedIn: true, payload: { token } });
+      return Either.right(token);
     },
 
+    /**
+     * @param {Object} user
+     * @returns {Either<Failure, User>}
+     */
     register: async user => {
+      // Validate input
       const errors = validation(user);
 
-      if (errors) return RegisterModel({ isRegistered: false, errors });
+      if (errors)
+        return Either.left(new InvalidInputFailure("Invalid input", errors));
 
+      // Check if the email is taken
       const exists = await repository.findUserByEmail(user.email);
 
       if (exists)
-        return RegisterModel({
-          isRegistered: false,
-          errors: {
-            email: "A user with the same e-mail already exists"
-          }
-        });
+        return Either.left(
+          new InvalidInputFailure("A user with the same e-mail already exists")
+        );
 
+      // Build the new user
       const newUser = Object.assign(user);
 
+      // Hash the password before storing it
       const hash = await bcrypt.hash(user.password, 10);
-
       newUser.password = hash;
 
       try {
         const dbUser = await repository.createUser(newUser);
-        return RegisterModel({ isRegistered: true, payload: dbUser });
+        return Either.right(dbUser);
       } catch (err) {
-        return RegisterModel({
-          isRegistered: false,
-          errors: { message: "Couldn't create the user" }
-        });
+        return Either.left(new InternalFailure("Couldn't create the user"));
       }
     }
   });

@@ -7,10 +7,7 @@ import UserToWatchRepository from "../repositories/user_to_watch_repository";
 import Watch from "../models/watch";
 import WatchRepository from "../repositories/watch_repository";
 import WatchService from "../services/watch_service";
-import {
-  MissingFieldFailure,
-  ConflictingResourceFailure
-} from "../core/failures/failures";
+import { InvalidInputFailure, ConflictFailure } from "../core/failures";
 
 const userToWatchRepository = UserToWatchRepository({
   userToWatchModel: UserToWatch
@@ -40,22 +37,10 @@ router.post(
 
     return result.fold(
       err => {
-        if (err instanceof MissingFieldFailure) {
-          return res.status(400).json({
-            error: {
-              type: "Missing field",
-              message: err.message,
-              payload: err.payload
-            }
-          });
-        } else if (err instanceof ConflictingResourceFailure) {
-          return res.status(409).json({
-            error: {
-              type: "Conflict",
-              message: err.message,
-              payload: err.payload
-            }
-          });
+        if (err instanceof InvalidInputFailure) {
+          return res.status(400).json(err.unwrap());
+        } else if (err instanceof ConflictFailure) {
+          return res.status(409).json(err.unwrap());
         }
       },
       watch => res.status(201).json(watch)
@@ -77,14 +62,7 @@ router.get(
     const result = await watchService.getUsersWatches(req.user._id);
 
     return result.fold(
-      err =>
-        res.status(400).json({
-          error: {
-            type: err.getType(),
-            message: err.message,
-            payload: err.payload
-          }
-        }),
+      err => res.status(400).json(err.unwrap()),
       usersWatch => res.status(200).json(usersWatch)
     );
   }
@@ -107,14 +85,7 @@ router.post(
     );
 
     return result.fold(
-      err =>
-        res.status(400).json({
-          error: {
-            type: err.getType(),
-            message: err.message,
-            payload: err.payload
-          }
-        }),
+      err => res.status(400).json(err.unwrap()),
       link => res.status(200).json(link)
     );
   }
