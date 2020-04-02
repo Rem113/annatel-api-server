@@ -45,7 +45,7 @@ export default class ActionRepository {
    * @returns {Array<Action>}
    */
   async getActionsByWatchId(watchId) {
-    const watch = await watchModel.findOne({ watchId });
+    const watch = await this.watchModel.findOne({ watchId });
 
     return this.actionModel.find({ watchId: watch._id });
   }
