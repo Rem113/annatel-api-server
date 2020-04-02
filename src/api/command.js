@@ -10,7 +10,10 @@ import WatchRepository from "../repositories/watch_repository";
 
 const commandRepository = CommandRepository({ commandModel: Command });
 const watchRepository = WatchRepository({ watchModel: Watch });
-const commandService = CommandService({ commandRepository, watchRepository });
+const commandService = new CommandService({
+  commandRepository,
+  watchRepository
+});
 
 const router = Router();
 

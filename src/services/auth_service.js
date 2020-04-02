@@ -7,75 +7,79 @@ import { InvalidInputFailure } from "../core/failures";
 
 /**
  * Auth functionnalities
- * @param {UserRepository} repository
+ * @param {UserRepository} userRepository
  * @param {UserValidator} validation
  * @returns {AuthService}
  */
-export default ({ repository, validation }) =>
-  Object.freeze({
-    /**
-     * @param {Object} user
-     * @returns {Either<Failure, AuthToken>}
-     */
-    login: async user => {
-      // Validate input
-      const errors = validation(user);
+export default class AuthService {
+  constructor({ userRepository, validation }) {
+    this.userRepository = userRepository;
+    this.validation = validation;
+  }
 
-      if (errors)
-        return Either.left(new InvalidInputFailure("Invalid input", errors));
+  /**
+   * @param {Object} user
+   * @returns {Either<Failure, AuthToken>}
+   */
+  async login(user) {
+    // Validate input
+    const errors = this.validation(user);
 
-      // Check if the user exists
-      const dbUser = await repository.findUserByEmail(user.email);
+    if (errors)
+      return Either.left(new InvalidInputFailure("Invalid input", errors));
 
-      if (!dbUser)
-        return Either.left(
-          new InvalidInputFailure("There is no user associated to this email")
-        );
+    // Check if the user exists
+    const dbUser = await this.userRepository.findUserByEmail(user.email);
 
-      // Compare the passwords
-      const valid = await bcrypt.compare(user.password, dbUser.password);
+    if (!dbUser)
+      return Either.left(
+        new InvalidInputFailure("There is no user associated to this email")
+      );
 
-      if (!valid) return;
-      Either.left(new InvalidInputFailure("Password is incorrect"));
+    // Compare the passwords
+    const valid = await bcrypt.compare(user.password, dbUser.password);
 
-      // Builds the token
-      const payload = { id: dbUser._id, email: dbUser.email };
-      const token = jwt.sign(payload, Keys.secretOrKey, { expiresIn: 3600 });
+    if (!valid) return;
+    Either.left(new InvalidInputFailure("Password is incorrect"));
 
-      return Either.right(token);
-    },
+    // Builds the token
+    const payload = { id: dbUser._id, email: dbUser.email };
+    const token = jwt.sign(payload, Keys.secretOrKey, { expiresIn: 3600 });
 
-    /**
-     * @param {Object} user
-     * @returns {Either<Failure, User>}
-     */
-    register: async user => {
-      // Validate input
-      const errors = validation(user);
+    return Either.right(token);
+  }
 
-      if (errors)
-        return Either.left(new InvalidInputFailure("Invalid input", errors));
+  /**
+   * @param {Object} user
+   * @returns {Either<Failure, User>}
+   */
+  async register(user) {
+    // Validate input
+    const errors = this.validation(user);
 
-      // Check if the email is taken
-      const exists = await repository.findUserByEmail(user.email);
+    if (errors)
+      return Either.left(new InvalidInputFailure("Invalid input", errors));
 
-      if (exists)
-        return Either.left(
-          new InvalidInputFailure("A user with the same e-mail already exists")
-        );
+    // Check if the email is taken
+    const exists = await this.userRepository.findUserByEmail(user.email);
 
-      // Build the new user
-      const newUser = Object.assign(user);
+    if (exists)
+      return Either.left(
+        new InvalidInputFailure("A user with the same e-mail already exists")
+      );
 
-      // Hash the password before storing it
-      const hash = await bcrypt.hash(user.password, 10);
-      newUser.password = hash;
+    // Build the new user
+    const newUser = Object.assign(user);
 
-      try {
-        const dbUser = await repository.createUser(newUser);
-        return Either.right(dbUser);
-      } catch (err) {
-        return Either.left(new InternalFailure("Couldn't create the user"));
-      }
+    // Hash the password before storing it
+    const hash = await bcrypt.hash(user.password, 10);
+    newUser.password = hash;
+
+    try {
+      const dbUser = await this.userRepository.createUser(newUser);
+      return Either.right(dbUser);
+    } catch (err) {
+      return Either.left(new InternalFailure("Couldn't create the user"));
     }
-  });
+  }
+}

@@ -10,7 +10,7 @@ import ActionService from "../services/action_service";
 
 const router = Router();
 
-const actionRepository = ActionRepository({
+const actionRepository = new ActionRepository({
   actionModel: Action,
   watchModel: Watch
 });

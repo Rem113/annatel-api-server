@@ -2,41 +2,51 @@
  * Database logic related to Actions
  * @param {Model<Action>} actionModel
  * @param {Model<Watch>} watchModel
- * @returns {ActionRepository}
  */
-export default ({ actionModel, watchModel }) =>
-  Object.freeze({
-    /**
-     * @param {Object} action
-     * @returns {Action} The created Action
-     */
-    createAction: action => actionModel.create(action),
+export default class ActionRepository {
+  constructor({ actionModel, watchModel }) {
+    this.actionModel = actionModel;
+    this.watchModel = watchModel;
+  }
 
-    /**
-     * @returns {Array<Action>}
-     */
-    getActions: () => actionModel.find(),
+  /**
+   * @param {Object} action
+   * @returns {Action} The created Action
+   */
+  async createAction(action) {
+    return await actionModel.create(action);
+  }
 
-    /**
-     * @param {Date} date
-     * @returns {Array<Action>}
-     */
-    getActionsAfterDate: date =>
-      actionModel.find({ insertedAt: { $gte: date } }),
+  /**
+   * @returns {Array<Action>}
+   */
+  async getActions() {
+    return await actionModel.find();
+  }
 
-    /**
-     * @param {String} actionType
-     * @returns {Array<Action>}
-     */
-    getActionsByType: actionType => actionModel.find({ actionType }),
+  /**
+   * @param {Date} date
+   * @returns {Array<Action>}
+   */
+  async getActionsAfterDate(date) {
+    return await actionModel.find({ insertedAt: { $gte: date } });
+  }
 
-    /**
-     * @param {String} watchId
-     * @returns {Array<Action>}
-     */
-    getActionsByWatchId: async watchId => {
-      const watch = await watchModel.findOne({ watchId });
+  /**
+   * @param {String} actionType
+   * @returns {Array<Action>}
+   */
+  async getActionsByType(actionType) {
+    return await actionModel.find({ actionType });
+  }
 
-      return actionModel.find({ watchId: watch._id });
-    }
-  });
+  /**
+   * @param {String} watchId
+   * @returns {Array<Action>}
+   */
+  async getActionsByWatchId(watchId) {
+    const watch = await watchModel.findOne({ watchId });
+
+    return actionModel.find({ watchId: watch._id });
+  }
+}

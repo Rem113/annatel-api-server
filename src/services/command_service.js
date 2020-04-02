@@ -52,11 +52,9 @@ const mapActionToObject = (watch, actionType, params) => {
   };
 };
 
-export default ({ commandRepository, watchRepository }) =>
-  Object.freeze({
-    createCommand: async (id, action, params) => {
-      const watch = await watchRepository.getWatchByWatchId(id);
-
-      if (!watch) return null;
-    }
-  });
+export default class CommandService {
+  constructor({ commandRepository, watchRepository }) {
+    this.commandRepository = commandRepository;
+    this.watchRepository = watchRepository;
+  }
+}
