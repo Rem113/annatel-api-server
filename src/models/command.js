@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-// TODO: Validate
 const Command = new Schema({
   command: {
     type: Schema.Types.String,

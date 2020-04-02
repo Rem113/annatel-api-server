@@ -31,7 +31,6 @@ export default ({ actionModel, watchModel }) =>
     getActionsByType: actionType => actionModel.find({ actionType }),
 
     /**
-     * Returns Actions based on the watch id, not to be confused with the watch ObjectId
      * @param {String} watchId
      * @returns {Array<Action>}
      */

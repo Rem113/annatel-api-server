@@ -1,16 +1,21 @@
 import mongoose, { Schema } from "mongoose";
 
-// TODO: Validate
 const TimeFrame = new Schema({
   dayOfWeek: {
+    max: 7,
+    min: 1,
     required: true,
     type: Schema.Types.Number
   },
   from: {
+    max: 86400,
+    min: 0,
     required: true,
     type: Schema.Types.Number
   },
   to: {
+    max: 86400,
+    min: 0,
     required: true,
     type: Schema.Types.Number
   }
@@ -23,10 +28,14 @@ const Geofence = new Schema({
     type: Schema.Types.Date
   },
   latitude: {
+    max: 90.0,
+    min: -90.0,
     required: true,
     type: Schema.Types.Decimal128
   },
   longitude: {
+    max: 180.0,
+    min: -180.0,
     required: true,
     type: Schema.Types.Decimal128
   },

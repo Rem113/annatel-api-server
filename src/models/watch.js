@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-// TODO: Validate
 const Watch = new Schema({
   insertedAt: {
     type: Schema.Types.Date,
@@ -16,7 +15,8 @@ const Watch = new Schema({
   },
   watchId: {
     type: Schema.Types.String,
-    required: true
+    required: true,
+    unique: true
   }
 });
 

@@ -1,9 +1,22 @@
 import { Either } from "monet";
-import { InvalidInputFailure, ConflictFailure } from "../core/failures";
+import {
+  InvalidInputFailure,
+  ConflictFailure,
+  InternalFailure
+} from "../core/failures";
 
-// TODO: Document
+/**
+ * Watch related functionalities
+ * @param {WatchRepository} watchRepository
+ * @param {UserToWatchRepository} userToWatchRepository
+ * @returns {WatchService}
+ */
 export default ({ watchRepository, userToWatchRepository }) =>
   Object.freeze({
+    /**
+     * @param {Object} watch
+     * @returns {Either<Failure, Watch>}
+     */
     createWatch: async watch => {
       const hasWatchIdProperty = watch.hasOwnProperty("watchId");
       const hasVendorProperty = watch.hasOwnProperty("vendor");
@@ -11,8 +24,8 @@ export default ({ watchRepository, userToWatchRepository }) =>
       if (!hasWatchIdProperty || !hasVendorProperty)
         return Either.left(
           new InvalidInputFailure("Please fill all the fields", {
-            hasWatchIdProperty,
-            hasVendorProperty
+            watchId: hasWatchIdProperty,
+            vendor: hasVendorProperty
           })
         );
 
@@ -23,16 +36,32 @@ export default ({ watchRepository, userToWatchRepository }) =>
           new ConflictFailure("There is already a watch with the specified id")
         );
 
-      const watchDocument = await watchRepository.createWatch(watch);
-      return Either.right(watchDocument);
+      try {
+        const watchDocument = await watchRepository.createWatch(watch);
+        return Either.right(watchDocument);
+      } catch (_) {
+        return Either.left(new InternalFailure("An error has occured"));
+      }
     },
+
+    /**
+     * @param {ObjectId} userId
+     * @returns {Either<Failure, Array<Watch>>}
+     */
     getUsersWatches: async userId => {
-      // TODO: Catch errors
-      const usersWatches = await watchRepository.getUsersWatches(userId);
-      return Either.right(usersWatches);
+      try {
+        const usersWatches = await watchRepository.getUsersWatches(userId);
+        return Either.right(usersWatches);
+      } catch (_) {
+        return Either.left(new InternalFailure("An error has occured"));
+      }
     },
+
+    /**
+     * @param {String} userId
+     * @param {ObjectId} watchId
+     */
     linkWatchToUser: async (userId, watchId) => {
-      // TODO: Catch errors
       try {
         const link = await userToWatchRepository.linkWatchToUser(
           userId,
