@@ -1,29 +1,30 @@
 import mongoose, { Schema } from "mongoose";
 
 const Action = new Schema({
-  vendor: {
+  actionType: {
     type: Schema.Types.String,
     required: true
   },
-  watchId: {
-    type: Schema.Types.ObjectId,
-    ref: "Watch"
+  insertedAt: {
+    type: Schema.Types.Date,
+    default: Date.now
   },
   length: {
     type: Schema.Types.Number,
-    required: true
-  },
-  actionType: {
-    type: Schema.Types.String,
     required: true
   },
   payload: {
     type: Object,
     default: {}
   },
-  insertedAt: {
-    type: Date,
+  updatedAt: {
+    type: Schema.Types.Date,
     default: Date.now
+  },
+  watchId: {
+    type: Schema.Types.ObjectId,
+    ref: "Watch",
+    required: true
   }
 });
 

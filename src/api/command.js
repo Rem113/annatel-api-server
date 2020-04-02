@@ -5,24 +5,22 @@ import Command from "../models/command";
 import CommandRepository from "../repositories/command_repository";
 import CommandService from "../services/command_service";
 
+import Watch from "../models/watch";
+import WatchRepository from "../repositories/watch_repository";
+
 const commandRepository = CommandRepository({ commandModel: Command });
-const commandService = CommandService({ commandRepository });
+const watchRepository = WatchRepository({ watchModel: Watch });
+const commandService = CommandService({ commandRepository, watchRepository });
 
 const router = Router();
 
 router.post(
   "/:id/:action",
   passport.authenticate("jwt", { session: false }),
-  (req, res) => {
+  async (req, res) => {
     const { id, action } = req.params;
 
-    switch (action) {
-      case "LK":
-        commandService.createLKCommand(id);
-        return res.status(201);
-      default:
-        return res.status(400).json({ message: "Action type unsupported" });
-    }
+    const command = await commandService.createCommand(id, action, req.params);
   }
 );
 

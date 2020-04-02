@@ -5,21 +5,18 @@ const User = new Schema({
     type: Schema.Types.String,
     required: true
   },
+  insertedAt: {
+    type: Schema.Types.Date,
+    default: Date.now
+  },
   password: {
     type: Schema.Types.String,
     required: true
   },
-  insertedAt: {
-    type: Date,
+  updatedAt: {
+    type: Schema.Types.Date,
     default: Date.now
-  },
-  associatedWatches: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Watch",
-      required: true
-    }
-  ]
+  }
 });
 
 export default mongoose.model("User", User, "Users");

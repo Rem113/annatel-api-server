@@ -1,22 +1,26 @@
 import mongoose, { Schema } from "mongoose";
 
 const Command = new Schema({
-  watchId: {
-    type: Schema.Types.ObjectId,
-    ref: "Watch",
-    required: true
-  },
   command: {
     type: Schema.Types.String,
     required: true
+  },
+  insertedAt: {
+    type: Schema.Types.Date,
+    default: Date.now
   },
   processed: {
     type: Schema.Types.Boolean,
     default: false
   },
-  insertedAt: {
+  updatedAt: {
     type: Schema.Types.Date,
     default: Date.now
+  },
+  watchId: {
+    type: Schema.Types.ObjectId,
+    ref: "Watch",
+    required: true
   }
 });
 
