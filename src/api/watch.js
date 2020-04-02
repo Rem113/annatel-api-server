@@ -80,7 +80,7 @@ router.get(
       err =>
         res.status(400).json({
           error: {
-            type: "Unknown",
+            type: err.getType(),
             message: err.message,
             payload: err.payload
           }
@@ -110,7 +110,7 @@ router.post(
       err =>
         res.status(400).json({
           error: {
-            type: "Unknown",
+            type: err.getType(),
             message: err.message,
             payload: err.payload
           }

@@ -37,7 +37,16 @@ export default ({ watchRepository, userToWatchRepository }) =>
     },
     linkWatchToUser: async (userId, watchId) => {
       // TODO: Catch errors
-      const link = await userToWatchRepository.linkWatchToUser(userId, watchId);
-      return Either.right(link);
+      try {
+        const link = await userToWatchRepository.linkWatchToUser(
+          userId,
+          watchId
+        );
+        return Either.right(link);
+      } catch (e) {
+        return Either.left(
+          new ConflictingResourceFailure("The watch is already linked")
+        );
+      }
     }
   });
