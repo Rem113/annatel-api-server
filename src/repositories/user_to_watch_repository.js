@@ -25,4 +25,4 @@ class UserToWatchRepository {
   }
 }
 
-export default userToWatchModel;
+export default UserToWatchRepository;

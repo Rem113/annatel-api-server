@@ -13,7 +13,7 @@ class WatchService {
    * @param {WatchRepository} watchRepository
    * @param {UserToWatchRepository} userToWatchRepository
    */
-  constructor({ watchRepository, userToWatchRepository }) {
+  constructor(watchRepository, userToWatchRepository) {
     this.watchRepository = watchRepository;
     this.userToWatchRepository = userToWatchRepository;
   }
@@ -43,8 +43,10 @@ class WatchService {
     try {
       const watchDocument = await this.watchRepository.createWatch(watch);
       return Either.right(watchDocument);
-    } catch (_) {
-      return Either.left(new InternalFailure("An error has occured"));
+    } catch (e) {
+      return Either.left(
+        new InternalFailure("An error has occured", e.toString())
+      );
     }
   }
 
@@ -56,8 +58,10 @@ class WatchService {
     try {
       const usersWatches = await this.watchRepository.getUsersWatches(userId);
       return Either.right(usersWatches);
-    } catch (_) {
-      return Either.left(new InternalFailure("An error has occured"));
+    } catch (e) {
+      return Either.left(
+        new InternalFailure("An error has occured", e.toString())
+      );
     }
   }
 
@@ -67,13 +71,16 @@ class WatchService {
    */
   async linkWatchToUser(userId, watchId) {
     try {
+      // TODO: Check if User and Watch exists
       const link = await this.userToWatchRepository.linkWatchToUser(
         userId,
         watchId
       );
       return Either.right(link);
     } catch (e) {
-      return Either.left(new ConflictFailure("The watch is already linked"));
+      return Either.left(
+        new ConflictFailure("The watch is already linked", e.toString())
+      );
     }
   }
 }
