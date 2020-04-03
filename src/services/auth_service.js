@@ -40,8 +40,8 @@ class AuthService {
     // Compare the passwords
     const valid = await bcrypt.compare(user.password, dbUser.password);
 
-    if (!valid) return;
-    Either.left(new InvalidInputFailure("Password is incorrect"));
+    if (!valid)
+      return Either.left(new InvalidInputFailure("Password is incorrect"));
 
     // Builds the token
     const payload = { id: dbUser._id, email: dbUser.email };
