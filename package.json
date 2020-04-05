@@ -1,12 +1,12 @@
 {
   "name": "annatel_server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Annatel watch's server",
   "main": "dist/app.js",
   "scripts": {
     "build": "rm -rf dist && tsc",
     "start": "node dist/app",
-    "dev": "tsc --watch",
+    "dev": "concurrently \"tsc --watch\" \"nodemon dist/app\"",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "clean": "rm -rf coverage && rm -rf dist"
@@ -31,6 +31,9 @@
     "@types/mongoose": "^5.7.8",
     "@types/passport": "^1.0.3",
     "@types/passport-jwt": "^3.0.3",
-    "jest": "^25.2.7"
+    "concurrently": "^5.1.0",
+    "jest": "^25.2.7",
+    "nodemon": "^2.0.2",
+    "typescript": "^3.8.3"
   }
 }
