@@ -13,7 +13,7 @@ export interface ICommand extends Document {
 const Command = new Schema({
   command: {
     required: true,
-    type: Schema.Types.String,
+    type: Schema.Types.Mixed,
   },
   insertedAt: {
     default: Date.now,
