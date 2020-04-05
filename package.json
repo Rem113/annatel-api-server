@@ -9,7 +9,8 @@
     "dev": "babel-watch src/app",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "doc": "jsdoc src/api src/repositories src/services"
+    "doc": "jsdoc src/api src/repositories src/services",
+    "clean": "rm -rf coverage && rm -rf dist && rm -rf out"
   },
   "author": "Hillel Saal & Gabriel Elbaz",
   "license": "ISC",
