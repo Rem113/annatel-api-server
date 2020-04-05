@@ -1,5 +1,3 @@
-// TODO: Handle errors
-
 /**
  * Action related functionalities
  */
@@ -27,7 +25,7 @@ class ActionService {
         watch.watchId
       );
 
-      actions.forEach(action => res.push(action));
+      actions.forEach((action) => res.push(action));
     }
 
     return res;
@@ -41,7 +39,7 @@ class ActionService {
   async getActionsAfterDate(date, userId) {
     const actions = await this.getActionsByUserId(userId);
 
-    return actions.filter(action => action.insertedAt > date);
+    return actions.filter((action) => action.insertedAt > date);
   }
 
   /**
@@ -52,7 +50,7 @@ class ActionService {
   async getActionsByType(actionType, userId) {
     const actions = await this.getActionsByUserId(userId);
 
-    return actions.filter(action => action.actionType === actionType);
+    return actions.filter((action) => action.actionType === actionType);
   }
 }
 

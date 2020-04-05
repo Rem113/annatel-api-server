@@ -14,7 +14,13 @@ const actionRepository = new ActionRepository(Action, Watch);
 const watchRepository = new WatchRepository(Watch, UserToWatch);
 const actionService = new ActionService(actionRepository, watchRepository);
 
-// TODO: Document
+/**
+ * ROUTE:       /
+ * METHOD:      GET
+ * PROTECTED:   YES
+ * BODY:        date? An optional max date parameter
+ * DESCRIPTION: Returns all the actions pertaining to the users' watches
+ */
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
@@ -25,7 +31,7 @@ router.get(
     let actions;
 
     if (date) {
-      actions = await actionService.getActionsAfterDate(date, userId);
+      actions = await actionService.getActionsAfterDate(new Date(date), userId);
       return res.status(200).json(actions);
     }
 
@@ -35,6 +41,13 @@ router.get(
   }
 );
 
+/**
+ * ROUTE:       /type/:type
+ * METHOD:      GET
+ * PROTECTED:   YES
+ * BODY:        No
+ * DESCRIPTION: Returns all the actions pertaining to the users' watches with the specified type
+ */
 router.get(
   "/type/:type",
   passport.authenticate("jwt", { session: false }),

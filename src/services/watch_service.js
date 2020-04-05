@@ -2,7 +2,7 @@ import { Either } from "monet";
 import {
   InvalidInputFailure,
   ConflictFailure,
-  InternalFailure
+  InternalFailure,
 } from "../core/failures";
 
 /**
@@ -29,7 +29,7 @@ class WatchService {
       return Either.left(
         new InvalidInputFailure("Please fill all the fields", {
           watchId: hasWatchIdProperty,
-          vendor: hasVendorProperty
+          vendor: hasVendorProperty,
         })
       );
 
@@ -71,7 +71,15 @@ class WatchService {
    */
   async linkWatchToUser(userId, watchId) {
     try {
-      // TODO: Check if User and Watch exists
+      const watch = await this.watchRepository.getWatchById(watchId);
+
+      if (watch === null)
+        return Either.left(
+          new InvalidInputFailure(
+            "The watch that you want to link does not exist"
+          )
+        );
+
       const link = await this.userToWatchRepository.linkWatchToUser(
         userId,
         watchId

@@ -3,9 +3,9 @@
  */
 class WatchRepository {
   /**
-   
- * @param {Model<Watch>} watchModel
- * @param {Model<UserToWatch>} userToWatchModel
+   * Constructor of WatchRepository
+   * @param {Model<Watch>} watchModel
+   * @param {Model<UserToWatch>} userToWatchModel
    */
   constructor(watchModel, userToWatchModel) {
     this.watchModel = watchModel;
@@ -14,32 +14,32 @@ class WatchRepository {
 
   /**
    * @param {Object} watch
-   * @returns {Watch} The created Watch
+   * @returns {Promise<Watch>} The created Watch
    */
-  async createWatch(watch) {
+  createWatch(watch) {
     return this.watchModel.create(watch);
   }
 
   /**
    * @param {ObjectId} id
-   * @returns {Watch}
+   * @returns {Promise<Watch>}
    */
-  async getWatchById(id) {
+  getWatchById(id) {
     return this.watchModel.findById(id);
   }
 
   /**
    * @param {String} watchId
-   * @returns {Watch}
+   * @returns {Promise<Watch>}
    */
-  async getWatchByWatchId(watchId) {
+  getWatchByWatchId(watchId) {
     return this.watchModel.findOne({ watchId });
   }
 
   /**
    * Returns the watches associated to a certain user
    * @param {ObjectId} userId
-   * @returns {Array<Watch>}
+   * @return {Promise<Array<Watch>>}
    */
   async getUsersWatches(userId) {
     const usersWatches = await this.userToWatchModel.find({ user: userId });

@@ -4,7 +4,6 @@
 class UserToWatchRepository {
   /**
    * @param {Model<UserToWatch>} userToWatchModel
-   *
    */
   constructor(userToWatchModel) {
     this.userToWatchModel = userToWatchModel;
@@ -13,7 +12,7 @@ class UserToWatchRepository {
   /**
    * @param {ObjectId} userId
    * @param {ObjectId} watchId
-   * @returns {UserToWatch}
+   * @returns {Promise<UserToWatch>}
    */
   async linkWatchToUser(userId, watchId) {
     const link = { user: userId, watch: watchId };

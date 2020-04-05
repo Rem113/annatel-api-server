@@ -9,24 +9,26 @@ const tInvalidPassword = "short";
 const tUser = {
   _id: "1234",
   email: tEmail,
-  password: tPassword
+  password: tPassword,
 };
 
 const tDbUser = {
   _id: "1234",
   email: tEmail,
-  password: bcrypt.hashSync(tPassword, 10)
+  password: bcrypt.hashSync(tPassword, 10),
 };
 
 const tError = {
-  error: "error"
+  error: "error",
 };
 
-const successfulValidate = jest.fn(_ => undefined);
-const failingValidate = jest.fn(_ => tError);
+const successfulValidate = jest.fn((_) => undefined);
+const failingValidate = jest.fn((_) => tError);
 
-const nullReturningFindUserByEmail = jest.fn(async _ => Promise.resolve(null));
-const userReturningFindUserByEmail = jest.fn(async _ =>
+const nullReturningFindUserByEmail = jest.fn(async (_) =>
+  Promise.resolve(null)
+);
+const userReturningFindUserByEmail = jest.fn(async (_) =>
   Promise.resolve(tDbUser)
 );
 
@@ -37,12 +39,9 @@ describe("register", () => {
     // Arrange
     const authRepository = {
       findUserByEmail: nullReturningFindUserByEmail,
-      createUser: mockCreateUser
+      createUser: mockCreateUser,
     };
-    const authService = AuthService({
-      repository: authRepository,
-      validation: failingValidate
-    });
+    const authService = new AuthService(authRepository, failingValidate);
 
     // Act
     const result = await authService.register(tUser);
@@ -57,12 +56,9 @@ describe("register", () => {
     // Arrange
     const authRepository = {
       findUserByEmail: userReturningFindUserByEmail,
-      createUser: mockCreateUser
+      createUser: mockCreateUser,
     };
-    const authService = AuthService({
-      repository: authRepository,
-      validation: successfulValidate
-    });
+    const authService = new AuthService(authRepository, successfulValidate);
 
     // Act
     const result = await authService.register(tUser);
@@ -78,12 +74,9 @@ describe("register", () => {
     // Arrange
     const authRepository = {
       findUserByEmail: nullReturningFindUserByEmail,
-      createUser: mockCreateUser
+      createUser: mockCreateUser,
     };
-    const authService = AuthService({
-      repository: authRepository,
-      validation: successfulValidate
-    });
+    const authService = new AuthService(authRepository, successfulValidate);
 
     // Act
     const result = await authService.register(tUser);
@@ -103,12 +96,9 @@ describe("login", () => {
     // Arrange
     const authRepository = {
       findUserByEmail: nullReturningFindUserByEmail,
-      createUser: mockCreateUser
+      createUser: mockCreateUser,
     };
-    const authService = AuthService({
-      repository: authRepository,
-      validation: failingValidate
-    });
+    const authService = new AuthService(authRepository, failingValidate);
 
     // Act
     const result = await authService.login(tUser);
@@ -124,12 +114,9 @@ describe("login", () => {
     // Arrange
     const authRepository = {
       findUserByEmail: nullReturningFindUserByEmail,
-      createUser: mockCreateUser
+      createUser: mockCreateUser,
     };
-    const authService = AuthService({
-      repository: authRepository,
-      validation: successfulValidate
-    });
+    const authService = new AuthService(authRepository, successfulValidate);
 
     // Act
     const result = await authService.login(tUser);
@@ -145,17 +132,17 @@ describe("login", () => {
     // Arrange
     const authRepository = {
       findUserByEmail: userReturningFindUserByEmail,
-      createUser: mockCreateUser
+      createUser: mockCreateUser,
     };
     const authService = AuthService({
       repository: authRepository,
-      validation: successfulValidate
+      validation: successfulValidate,
     });
 
     // Act
     const result = await authService.login({
       email: tEmail,
-      password: tInvalidPassword
+      password: tInvalidPassword,
     });
 
     // Assert

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "rm -rf dist && babel src -d dist",
     "start": "node dist/app",
+    "dev": "babel-watch src/app",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "doc": "jsdoc src/api src/repositories src/services"
@@ -33,6 +34,7 @@
     "@shelf/jest-mongodb": "^1.1.5",
     "@types/jest": "^24.9.1",
     "babel-jest": "^25.2.6",
+    "babel-watch": "^7.0.0",
     "jest": "^25.2.7",
     "jsdoc": "^3.6.3"
   }

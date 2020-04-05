@@ -11,18 +11,18 @@ class UserRepository {
 
   /**
    * @param {String} email
-   * @returns {User?}
+   * @returns {Promise<User?>}
    */
-  async findUserByEmail(email) {
-    return await this.userModel.findOne({ email });
+  findUserByEmail(email) {
+    return this.userModel.findOne({ email });
   }
 
   /**
    * @param {Object} user
-   * @returns {User} The created User
+   * @returns {Promise<User>} The created User
    */
-  async createUser(user) {
-    return await this.userModel.create(user);
+  createUser(user) {
+    return this.userModel.create(user);
   }
 }
 
