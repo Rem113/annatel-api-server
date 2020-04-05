@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IWatch extends Document {
   insertedAt: Date;
@@ -9,20 +9,20 @@ export interface IWatch extends Document {
 
 const Watch = new Schema({
   insertedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
   updatedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
   vendor: {
-    type: Schema.Types.String,
     required: true,
+    type: Schema.Types.String,
   },
   watchId: {
-    type: Schema.Types.String,
     required: true,
+    type: Schema.Types.String,
     unique: true,
   },
 });

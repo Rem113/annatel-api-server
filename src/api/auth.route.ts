@@ -1,10 +1,13 @@
 import { Router } from "express";
 
 import User from "../models/user.model";
+
 import { EmailValidator, PasswordValidator } from "../core/validators";
-import UserRepository from "../repositories/user_repository";
-import AuthService from "../services/auth_service";
 import { InvalidInputFailure } from "../core/failures";
+
+import UserRepository from "../repositories/user_repository";
+
+import AuthService from "../services/auth_service";
 
 const router = Router();
 

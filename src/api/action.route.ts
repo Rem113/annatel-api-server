@@ -2,12 +2,14 @@ import { Router } from "express";
 import passport from "passport";
 
 import Action, { ActionType } from "../models/action.model";
-import Watch from "../models/watch.model";
 import Link from "../models/link.model";
-import WatchRepository from "../repositories/watch_repository";
-import ActionRepository from "../repositories/action_repository";
-import ActionService from "../services/action_service";
+import Watch from "../models/watch.model";
 import { IUser } from "../models/user.model";
+
+import ActionRepository from "../repositories/action_repository";
+import WatchRepository from "../repositories/watch_repository";
+
+import ActionService from "../services/action_service";
 
 const router = Router();
 

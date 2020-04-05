@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+
 import { IWatch } from "./watch.model";
 
 export interface ICommand extends Document {
@@ -11,25 +12,25 @@ export interface ICommand extends Document {
 
 const Command = new Schema({
   command: {
-    type: Schema.Types.String,
     required: true,
+    type: Schema.Types.String,
   },
   insertedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
   processed: {
-    type: Schema.Types.Boolean,
     default: false,
+    type: Schema.Types.Boolean,
   },
   updatedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
   watchId: {
-    type: Schema.Types.ObjectId,
     ref: "Watch",
     required: true,
+    type: Schema.Types.ObjectId,
   },
 });
 

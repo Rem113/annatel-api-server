@@ -1,18 +1,19 @@
 import { Router } from "express";
 import passport from "passport";
 
-import Link from "../models/link.model";
-import LinkRepository from "../repositories/link_repository";
-
-import Watch from "../models/watch.model";
-import WatchRepository from "../repositories/watch_repository";
-import WatchService from "../services/watch_service";
 import { InvalidInputFailure, ConflictFailure } from "../core/failures";
+import Link from "../models/link.model";
+import Watch from "../models/watch.model";
 import { IUser } from "../models/user.model";
 
-const linkRepository = new LinkRepository(Link);
+import LinkRepository from "../repositories/link_repository";
+import WatchRepository from "../repositories/watch_repository";
 
+import WatchService from "../services/watch_service";
+
+const linkRepository = new LinkRepository(Link);
 const watchRepository = new WatchRepository(Watch, Link);
+
 const watchService = new WatchService(watchRepository, linkRepository);
 
 const router = Router();

@@ -11,6 +11,7 @@ import Link from "../models/link.model";
 
 const commandRepository = new CommandRepository(Command);
 const watchRepository = new WatchRepository(Watch, Link);
+
 const commandService = new CommandService(commandRepository, watchRepository);
 
 const router = Router();

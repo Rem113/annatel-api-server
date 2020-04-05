@@ -1,6 +1,7 @@
+import mongoose, { Document, Schema } from "mongoose";
+
 import { IUser } from "./user.model";
 import { IWatch } from "./watch.model";
-import mongoose, { Document, Schema } from "mongoose";
 
 export interface ILink extends Document {
   insertedAt: Date;
@@ -12,16 +13,16 @@ export interface ILink extends Document {
 
 const Link = new Schema({
   insertedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
   stopped: {
-    type: Schema.Types.Boolean,
     default: false,
+    type: Schema.Types.Boolean,
   },
   updatedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
   user: {
     ref: "User",

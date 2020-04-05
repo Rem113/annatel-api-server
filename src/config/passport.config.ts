@@ -1,3 +1,4 @@
+import { PassportStatic } from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 import User from "../models/user.model";
 import Keys from "./keys";
@@ -7,7 +8,7 @@ const opts = {
   secretOrKey: Keys.secretOrKey,
 };
 
-export default (passport: any): any => {
+export default (passport: PassportStatic): PassportStatic =>
   passport.use(
     new Strategy(opts, (payload: any, done: any) => {
       User.findById(payload.id, (err: any, user: any) => {
@@ -17,4 +18,3 @@ export default (passport: any): any => {
       });
     })
   );
-};

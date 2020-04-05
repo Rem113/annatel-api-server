@@ -1,6 +1,6 @@
-import { Model } from "mongoose";
 import { IAction, ActionType } from "../models/action.model";
 import { IWatch } from "../models/watch.model";
+import { Model } from "mongoose";
 
 export default class ActionRepository {
   actionModel: Model<IAction>;

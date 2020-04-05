@@ -1,4 +1,4 @@
-export class Failure {
+export abstract class Failure {
   message: string;
   payload?: object;
 
@@ -7,11 +7,11 @@ export class Failure {
     this.payload = payload;
   }
 
-  getType() {
+  getType(): string {
     return "Unknown";
   }
 
-  unwrap() {
+  unwrap(): object {
     return {
       error: {
         type: this.getType(),

@@ -1,4 +1,7 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { Either } from "monet";
+
 import {
   Failure,
   InternalFailure,
@@ -6,8 +9,6 @@ import {
 } from "../core/failures";
 import { IUser } from "../models/user.model";
 import { IValidator } from "../core/validators";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import Keys from "../config/keys";
 import UserRepository from "../repositories/user_repository";
 

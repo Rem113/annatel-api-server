@@ -9,21 +9,21 @@ export interface IUser extends Document {
 
 const User = new Schema({
   email: {
-    type: Schema.Types.String,
     required: true,
+    type: Schema.Types.String,
     unique: true,
   },
   insertedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
   password: {
-    type: Schema.Types.String,
     required: true,
+    type: Schema.Types.String,
   },
   updatedAt: {
-    type: Schema.Types.Date,
     default: Date.now,
+    type: Schema.Types.Date,
   },
 });
 

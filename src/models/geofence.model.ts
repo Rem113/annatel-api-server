@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+
 import { IWatch } from "./watch.model";
 
 export enum DayOfWeek {

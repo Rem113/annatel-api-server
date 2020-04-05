@@ -1,5 +1,5 @@
-import { Model } from "mongoose";
 import { ICommand } from "../models/command.model";
+import { Model } from "mongoose";
 
 export default class CommandRepository {
   commandModel: Model<ICommand>;

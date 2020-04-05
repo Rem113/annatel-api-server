@@ -1,7 +1,8 @@
 import { Model } from "mongoose";
-import { IWatch } from "../models/watch.model";
+
 import { ILink } from "../models/link.model";
 import { IUser } from "../models/user.model";
+import { IWatch } from "../models/watch.model";
 
 export default class WatchRepository {
   watchModel: Model<IWatch>;

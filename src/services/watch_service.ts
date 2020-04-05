@@ -1,15 +1,16 @@
 import { Either } from "monet";
+
 import {
-  InvalidInputFailure,
   ConflictFailure,
-  InternalFailure,
   Failure,
+  InternalFailure,
+  InvalidInputFailure,
 } from "../core/failures";
-import WatchRepository from "../repositories/watch_repository";
-import LinkRepository from "../repositories/link_repository";
-import { IWatch } from "../models/watch.model";
-import { IUser } from "../models/user.model";
 import { ILink } from "../models/link.model";
+import { IUser } from "../models/user.model";
+import { IWatch } from "../models/watch.model";
+import LinkRepository from "../repositories/link_repository";
+import WatchRepository from "../repositories/watch_repository";
 
 export default class WatchService {
   watchRepository: WatchRepository;
