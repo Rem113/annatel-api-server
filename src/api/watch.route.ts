@@ -42,7 +42,7 @@ router.post(
           return res.status(500).json(err.unwrap());
         }
       },
-      (watch) => res.status(201).json(watch)
+      (watch) => res.status(201).json({ watch })
     );
   }
 );
@@ -91,7 +91,7 @@ router.post(
 
     return result.fold(
       (err) => res.status(400).json(err.unwrap()),
-      (link) => res.status(200).json(link)
+      (link) => res.status(200).json({ link })
     );
   }
 );
@@ -122,7 +122,7 @@ router.patch(
 
     return result.fold(
       (err) => res.status(400).json(err.unwrap()),
-      (link) => res.status(200).json(link)
+      (link) => res.status(200).json({ link })
     );
   }
 );

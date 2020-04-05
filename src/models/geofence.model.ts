@@ -33,7 +33,8 @@ export interface IGeofence extends Document {
 
 const TimeFrame = new Schema({
   dayOfWeek: {
-    enum: DayOfWeek,
+    max: DayOfWeek.SATURDAY,
+    min: DayOfWeek.SUNDAY,
     required: true,
     type: Schema.Types.Number,
   },

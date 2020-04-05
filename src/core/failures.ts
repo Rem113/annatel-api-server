@@ -34,6 +34,12 @@ export class InvalidInputFailure extends Failure {
   }
 }
 
+export class UnauthorizedFailure extends Failure {
+  getType() {
+    return "Unauthorized";
+  }
+}
+
 export class ConflictFailure extends Failure {
   getType() {
     return "Conflict";

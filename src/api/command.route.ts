@@ -51,7 +51,7 @@ router.post(
 
     return result.fold(
       (err) => res.status(400).json(err.unwrap()),
-      (command) => res.status(201).json(command)
+      (command) => res.status(201).json({ command })
     );
   }
 );
