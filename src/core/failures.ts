@@ -1,8 +1,8 @@
 export abstract class Failure {
   message: string;
-  payload?: object;
+  payload?: any;
 
-  constructor(message: string, payload?: object) {
+  constructor(message: string, payload?: any) {
     this.message = message;
     this.payload = payload;
   }

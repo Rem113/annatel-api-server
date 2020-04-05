@@ -9,6 +9,7 @@ export default class UserRepository {
   }
 
   findUserByEmail(email: IUser["email"]): Promise<IUser | null> {
+    // TODO: Catch exceptions
     return this.userModel.findOne({ email }).exec();
   }
 

@@ -16,6 +16,7 @@ export default class ActionRepository {
   }
 
   getActions(): Promise<IAction[]> {
+    // TODO: Catch exceptions
     return this.actionModel.find().exec();
   }
 
@@ -28,6 +29,7 @@ export default class ActionRepository {
   }
 
   async getActionsByWatchId(watchId: IWatch["_id"]): Promise<IAction[]> {
+    // TODO: Catch exceptions
     const watch = await this.watchModel.findOne({ watchId });
 
     if (watch === null) throw "There is no watch associated to this id";

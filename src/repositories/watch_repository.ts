@@ -18,20 +18,26 @@ export default class WatchRepository {
   }
 
   getWatchById(id: IWatch["_id"]): Promise<IWatch | null> {
+    // TODO: Catch exceptions
     return this.watchModel.findById(id).exec();
   }
 
   getWatchByWatchId(watchId: IWatch["watchId"]): Promise<IWatch | null> {
+    // TODO: Catch exceptions
     return this.watchModel.findOne({ watchId }).exec();
   }
 
   async getUsersWatches(userId: IUser["_id"]): Promise<IWatch[]> {
-    const usersWatches = await this.linkModel.find({ user: userId });
+    // TODO: Catch exceptions
+    const links = await this.linkModel.find({ user: userId });
 
     const res: IWatch[] = [];
 
-    for await (const userToWatch of usersWatches) {
-      const temp = await this.watchModel.findById(userToWatch.watch).exec();
+    for await (const link of links) {
+      if (link.stopped) continue;
+
+      // TODO: Catch exceptions
+      const temp = await this.watchModel.findById(link.watch).exec();
 
       if (temp !== null) res.push(temp);
     }

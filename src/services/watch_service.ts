@@ -84,20 +84,27 @@ export default class WatchService {
     }
   }
 
-  async renameLink(
+  async updateLink(
     userId: IUser["_id"],
     watchId: IUser["_id"],
-    name: string
+    name: string,
+    stopped: boolean
   ): Promise<Either<Failure, ILink>> {
-    if (name === undefined || name.trim().length === 0)
-      return Either.left(new InvalidInputFailure("Please enter a name"));
+    let link: ILink | null;
 
-    const link = await this.linkRepository.findLink(userId, watchId);
+    try {
+      link = await this.linkRepository.findLink(userId, watchId);
+    } catch (e) {
+      return Either.left(
+        new InternalFailure("An error has occured", e.toString())
+      );
+    }
 
     if (link === null)
       return Either.left(new InvalidInputFailure("The link does not exist"));
 
-    link.name = name;
+    link.name = name ?? link.name;
+    link.stopped = stopped ?? link.stopped;
 
     const newLink = await this.linkRepository.updateLink(userId, watchId, link);
 

@@ -74,7 +74,7 @@ router.get(
  * METHOD:      POST
  * PROTECTED:   YES
  * BODY:        name:  The name of the link
- * DESCRIPTION: Link the current user with the specified watch id.
+ * DESCRIPTION: Link the current user with the specified watch id
  */
 router.post(
   "/link/:watchId",
@@ -96,18 +96,28 @@ router.post(
   }
 );
 
-// TODO: Comment
-router.put(
+/**
+ * ROUTE:       /link/:watchId
+ * METHOD:      PATCH
+ * PROTECTED:   YES
+ * BODY:        name: The name of the link
+ *              stopped: True or false
+ * DESCRIPTION: Updated a link. A null body won't affect the resource
+ */
+router.patch(
   "/link/:watchId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const name = req.body.name;
     const userId = (req.user as IUser)._id;
+    const watchId = req.params.watchId;
+    const name = req.body.name;
+    const stopped = req.body.stopped;
 
-    const result = await watchService.renameLink(
+    const result = await watchService.updateLink(
       userId,
-      req.params.watchId,
-      name
+      watchId,
+      name,
+      stopped
     );
 
     return result.fold(
