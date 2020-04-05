@@ -58,25 +58,49 @@ export default class WatchService {
 
   async linkWatchToUser(
     userId: IUser["_id"],
-    watchId: IWatch["_id"]
+    watchId: IWatch["_id"],
+    name: string
   ): Promise<Either<Failure, ILink>> {
+    if (name === undefined || name.trim().length === 0)
+      return Either.left(new InvalidInputFailure("Please enter a name"));
+
+    // Checks if watch exists
+    const watch = await this.watchRepository.getWatchById(watchId);
+
+    if (watch === null)
+      return Either.left(
+        new InvalidInputFailure(
+          "The watch that you want to link does not exist"
+        )
+      );
+
     try {
-      // Checks if watch exists
-      const watch = await this.watchRepository.getWatchById(watchId);
-
-      if (watch === null)
-        return Either.left(
-          new InvalidInputFailure(
-            "The watch that you want to link does not exist"
-          )
-        );
-
-      const link = await this.linkRepository.linkWatchToUser(userId, watchId);
+      const link = await this.linkRepository.createLink(userId, watchId, name);
       return Either.right(link);
     } catch (e) {
       return Either.left(
         new ConflictFailure("The watch is already linked", e.toString())
       );
     }
+  }
+
+  async renameLink(
+    userId: IUser["_id"],
+    watchId: IUser["_id"],
+    name: string
+  ): Promise<Either<Failure, ILink>> {
+    if (name === undefined || name.trim().length === 0)
+      return Either.left(new InvalidInputFailure("Please enter a name"));
+
+    const link = await this.linkRepository.findLink(userId, watchId);
+
+    if (link === null)
+      return Either.left(new InvalidInputFailure("The link does not exist"));
+
+    link.name = name;
+
+    const newLink = await this.linkRepository.updateLink(userId, watchId, link);
+
+    return Either.right(newLink);
   }
 }

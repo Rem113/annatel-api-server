@@ -73,18 +73,41 @@ router.get(
  * ROUTE:       /link/:watchId
  * METHOD:      POST
  * PROTECTED:   YES
- * BODY:        None
+ * BODY:        name:  The name of the link
  * DESCRIPTION: Link the current user with the specified watch id.
  */
 router.post(
   "/link/:watchId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const name = req.body.name;
     const userId = (req.user as IUser)._id;
 
     const result = await watchService.linkWatchToUser(
       userId,
-      req.params.watchId
+      req.params.watchId,
+      name
+    );
+
+    return result.fold(
+      (err) => res.status(400).json(err.unwrap()),
+      (link) => res.status(200).json(link)
+    );
+  }
+);
+
+// TODO: Comment
+router.put(
+  "/link/:watchId",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const name = req.body.name;
+    const userId = (req.user as IUser)._id;
+
+    const result = await watchService.renameLink(
+      userId,
+      req.params.watchId,
+      name
     );
 
     return result.fold(

@@ -5,6 +5,7 @@ import { IWatch } from "./watch.model";
 
 export interface ILink extends Document {
   insertedAt: Date;
+  name: string;
   stopped: boolean;
   updatedAt: Date;
   user: IUser["_id"];
@@ -15,6 +16,10 @@ const Link = new Schema({
   insertedAt: {
     default: Date.now,
     type: Schema.Types.Date,
+  },
+  name: {
+    required: true,
+    type: Schema.Types.String,
   },
   stopped: {
     default: false,
@@ -36,4 +41,4 @@ const Link = new Schema({
   },
 });
 
-export default mongoose.model<ILink>("Link", Link, "Link");
+export default mongoose.model<ILink>("Link", Link, "Links");
