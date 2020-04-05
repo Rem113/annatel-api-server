@@ -1,38 +1,44 @@
+import { Either } from "monet";
+import {
+  Failure,
+  InternalFailure,
+  InvalidInputFailure,
+} from "../core/failures";
+import { IUser } from "../models/user.model";
+import { IValidator } from "../core/validators";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
 import Keys from "../config/keys";
-import { Either } from "monet";
-import { InvalidInputFailure } from "../core/failures";
+import UserRepository from "../repositories/user_repository";
 
-/**
- * Auth functionnalities
- */
 class AuthService {
-  /**
-   * @param {UserRepository} userRepository
-   * @param {UserValidator} validation
-   */
-  constructor(userRepository, validation) {
+  userRepository: UserRepository;
+  emailValidator: IValidator;
+  passwordValidator: IValidator;
+
+  constructor(
+    userRepository: UserRepository,
+    emailValidator: IValidator,
+    passwordValidator: IValidator
+  ) {
     this.userRepository = userRepository;
-    this.validation = validation;
+    this.emailValidator = emailValidator;
+    this.passwordValidator = passwordValidator;
   }
 
-  /**
-   * @param {Object} user
-   * @returns {Either<Failure, AuthToken>}
-   */
-  async login(user) {
+  async login(user: IUser): Promise<Either<Failure, string>> {
     // Validate input
-    const errors = this.validation(user);
+    const emailError = this.emailValidator.validate(user.email);
+    if (emailError) return Either.left(new InvalidInputFailure(emailError));
 
-    if (errors)
-      return Either.left(new InvalidInputFailure("Invalid input", errors));
+    const passwordError = this.passwordValidator.validate(user.password);
+    if (passwordError)
+      return Either.left(new InvalidInputFailure(passwordError));
 
     // Check if the user exists
     const dbUser = await this.userRepository.findUserByEmail(user.email);
 
-    if (!dbUser)
+    if (dbUser === null)
       return Either.left(
         new InvalidInputFailure("There is no user associated to this email")
       );
@@ -50,21 +56,19 @@ class AuthService {
     return Either.right(token);
   }
 
-  /**
-   * @param {Object} user
-   * @returns {Either<Failure, User>}
-   */
-  async register(user) {
+  async register(user: IUser): Promise<Either<Failure, IUser>> {
     // Validate input
-    const errors = this.validation(user);
+    const emailError = this.emailValidator.validate(user.email);
+    if (emailError) return Either.left(new InvalidInputFailure(emailError));
 
-    if (errors)
-      return Either.left(new InvalidInputFailure("Invalid input", errors));
+    const passwordError = this.passwordValidator.validate(user.password);
+    if (passwordError)
+      return Either.left(new InvalidInputFailure(passwordError));
 
     // Check if the email is taken
     const exists = await this.userRepository.findUserByEmail(user.email);
 
-    if (exists)
+    if (exists !== null)
       return Either.left(
         new InvalidInputFailure("A user with the same e-mail already exists")
       );

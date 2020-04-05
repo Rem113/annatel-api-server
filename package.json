@@ -4,13 +4,12 @@
   "description": "Annatel watch's server",
   "main": "dist/app.js",
   "scripts": {
-    "build": "rm -rf dist && babel src -d dist",
+    "build": "rm -rf dist && tsc",
     "start": "node dist/app",
-    "dev": "babel-watch src/app",
+    "dev": "tsc --watch",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "doc": "jsdoc src/api src/repositories src/services",
-    "clean": "rm -rf coverage && rm -rf dist && rm -rf out"
+    "clean": "rm -rf coverage && rm -rf dist"
   },
   "author": "Hillel Saal & Gabriel Elbaz",
   "license": "ISC",
@@ -23,20 +22,15 @@
     "monet": "^0.9.1",
     "mongoose": "^5.9.7",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "validate.js": "^0.13.1"
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/plugin-transform-runtime": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
-    "@babel/runtime": "^7.9.2",
-    "@shelf/jest-mongodb": "^1.1.5",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.0",
     "@types/jest": "^24.9.1",
-    "babel-jest": "^25.2.6",
-    "babel-watch": "^7.0.0",
-    "jest": "^25.2.7",
-    "jsdoc": "^3.6.3"
+    "@types/mongoose": "^5.7.8",
+    "@types/passport": "^1.0.3",
+    "@types/passport-jwt": "^3.0.3",
+    "jest": "^25.2.7"
   }
 }

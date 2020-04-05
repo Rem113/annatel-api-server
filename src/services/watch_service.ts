@@ -3,39 +3,31 @@ import {
   InvalidInputFailure,
   ConflictFailure,
   InternalFailure,
+  Failure,
 } from "../core/failures";
+import WatchRepository from "../repositories/watch_repository";
+import LinkRepository from "../repositories/link_repository";
+import { IWatch } from "../models/watch.model";
+import { IUser } from "../models/user.model";
+import { ILink } from "../models/link.model";
 
-/**
- * Watch related functionalities
- */
-class WatchService {
-  /**
-   * @param {WatchRepository} watchRepository
-   * @param {UserToWatchRepository} userToWatchRepository
-   */
-  constructor(watchRepository, userToWatchRepository) {
+export default class WatchService {
+  watchRepository: WatchRepository;
+  linkRepository: LinkRepository;
+
+  constructor(
+    watchRepository: WatchRepository,
+    linkRepository: LinkRepository
+  ) {
     this.watchRepository = watchRepository;
-    this.userToWatchRepository = userToWatchRepository;
+    this.linkRepository = linkRepository;
   }
-  /**
-   * @param {Object} watch
-   * @returns {Either<Failure, Watch>}
-   */
-  async createWatch(watch) {
-    const hasWatchIdProperty = watch.hasOwnProperty("watchId");
-    const hasVendorProperty = watch.hasOwnProperty("vendor");
 
-    if (!hasWatchIdProperty || !hasVendorProperty)
-      return Either.left(
-        new InvalidInputFailure("Please fill all the fields", {
-          watchId: hasWatchIdProperty,
-          vendor: hasVendorProperty,
-        })
-      );
-
+  async createWatch(watch: IWatch): Promise<Either<Failure, IWatch>> {
     // Check for duplicate watch
     const exists = await this.watchRepository.getWatchByWatchId(watch.watchId);
-    if (exists)
+
+    if (exists !== null)
       return Either.left(
         new ConflictFailure("There is already a watch with the specified id")
       );
@@ -50,11 +42,9 @@ class WatchService {
     }
   }
 
-  /**
-   * @param {ObjectId} userId
-   * @returns {Either<Failure, Array<Watch>>}
-   */
-  async getUsersWatches(userId) {
+  async getUsersWatches(
+    userId: IUser["_id"]
+  ): Promise<Either<Failure, IWatch[]>> {
     try {
       const usersWatches = await this.watchRepository.getUsersWatches(userId);
       return Either.right(usersWatches);
@@ -65,12 +55,12 @@ class WatchService {
     }
   }
 
-  /**
-   * @param {String} userId
-   * @param {ObjectId} watchId
-   */
-  async linkWatchToUser(userId, watchId) {
+  async linkWatchToUser(
+    userId: IUser["_id"],
+    watchId: IWatch["_id"]
+  ): Promise<Either<Failure, ILink>> {
     try {
+      // Checks if watch exists
       const watch = await this.watchRepository.getWatchById(watchId);
 
       if (watch === null)
@@ -80,10 +70,7 @@ class WatchService {
           )
         );
 
-      const link = await this.userToWatchRepository.linkWatchToUser(
-        userId,
-        watchId
-      );
+      const link = await this.linkRepository.linkWatchToUser(userId, watchId);
       return Either.right(link);
     } catch (e) {
       return Either.left(
@@ -92,5 +79,3 @@ class WatchService {
     }
   }
 }
-
-export default WatchService;

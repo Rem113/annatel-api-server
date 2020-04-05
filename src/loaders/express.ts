@@ -1,11 +1,11 @@
 import Keys from "../config/keys";
 
-import authRoutes from "../api/auth";
-import actionRoutes from "../api/action";
-import commandRoutes from "../api/command";
-import watchRoutes from "../api/watch";
+import authRoutes from "../api/auth.route";
+import actionRoutes from "../api/action.route";
+import commandRoutes from "../api/command.route";
+import watchRoutes from "../api/watch.route";
 
-export default app => {
+export default (app: any) => {
   app.use("/api/auth", authRoutes);
   app.use("/api/action", actionRoutes);
   app.use("/api/command", commandRoutes);

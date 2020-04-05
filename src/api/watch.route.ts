@@ -1,18 +1,19 @@
 import { Router } from "express";
 import passport from "passport";
 
-import UserToWatch from "../models/user_to_watch";
-import UserToWatchRepository from "../repositories/user_to_watch_repository";
+import Link from "../models/link.model";
+import LinkRepository from "../repositories/link_repository";
 
-import Watch from "../models/watch";
+import Watch from "../models/watch.model";
 import WatchRepository from "../repositories/watch_repository";
 import WatchService from "../services/watch_service";
 import { InvalidInputFailure, ConflictFailure } from "../core/failures";
+import { IUser } from "../models/user.model";
 
-const userToWatchRepository = new UserToWatchRepository(UserToWatch);
+const linkRepository = new LinkRepository(Link);
 
-const watchRepository = new WatchRepository(Watch, UserToWatch);
-const watchService = new WatchService(watchRepository, userToWatchRepository);
+const watchRepository = new WatchRepository(Watch, Link);
+const watchService = new WatchService(watchRepository, linkRepository);
 
 const router = Router();
 
@@ -31,14 +32,16 @@ router.post(
     const result = await watchService.createWatch(req.body);
 
     return result.fold(
-      err => {
+      (err) => {
         if (err instanceof InvalidInputFailure) {
           return res.status(400).json(err.unwrap());
         } else if (err instanceof ConflictFailure) {
           return res.status(409).json(err.unwrap());
+        } else {
+          return res.status(500).json(err.unwrap());
         }
       },
-      watch => res.status(201).json(watch)
+      (watch) => res.status(201).json(watch)
     );
   }
 );
@@ -54,11 +57,13 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const result = await watchService.getUsersWatches(req.user._id);
+    const userId = (req.user as IUser)._id;
+
+    const result = await watchService.getUsersWatches(userId);
 
     return result.fold(
-      err => res.status(400).json(err.unwrap()),
-      usersWatch => res.status(200).json(usersWatch)
+      (err) => res.status(400).json(err.unwrap()),
+      (usersWatch) => res.status(200).json(usersWatch)
     );
   }
 );
@@ -74,14 +79,16 @@ router.post(
   "/link/:watchId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
+    const userId = (req.user as IUser)._id;
+
     const result = await watchService.linkWatchToUser(
-      req.user._id,
+      userId,
       req.params.watchId
     );
 
     return result.fold(
-      err => res.status(400).json(err.unwrap()),
-      link => res.status(200).json(link)
+      (err) => res.status(400).json(err.unwrap()),
+      (link) => res.status(200).json(link)
     );
   }
 );

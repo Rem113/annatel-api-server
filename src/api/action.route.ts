@@ -1,17 +1,18 @@
 import { Router } from "express";
 import passport from "passport";
 
-import Action from "../models/action";
-import Watch from "../models/watch";
-import UserToWatch from "../models/user_to_watch";
+import Action, { ActionType } from "../models/action.model";
+import Watch from "../models/watch.model";
+import Link from "../models/link.model";
 import WatchRepository from "../repositories/watch_repository";
 import ActionRepository from "../repositories/action_repository";
 import ActionService from "../services/action_service";
+import { IUser } from "../models/user.model";
 
 const router = Router();
 
 const actionRepository = new ActionRepository(Action, Watch);
-const watchRepository = new WatchRepository(Watch, UserToWatch);
+const watchRepository = new WatchRepository(Watch, Link);
 const actionService = new ActionService(actionRepository, watchRepository);
 
 /**
@@ -26,7 +27,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const { date } = req.params;
-    const userId = req.user._id;
+    const userId = (req.user as IUser)._id;
 
     let actions;
 
@@ -52,8 +53,8 @@ router.get(
   "/type/:type",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const actionType = req.params.type;
-    const userId = req.user._id;
+    const actionType = ActionType[req.params.type as keyof typeof ActionType];
+    const userId = (req.user as IUser)._id;
 
     const actions = await actionService.getActionsByType(actionType, userId);
 
