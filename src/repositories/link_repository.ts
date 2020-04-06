@@ -27,6 +27,10 @@ export default class LinkRepository {
     return this.linkModel.findOne({ user: userId, watch: watchId }).exec();
   }
 
+  getUsersLinks(userId: IUser["_id"]): Promise<ILink[]> {
+    return this.linkModel.find({ user: userId }).exec();
+  }
+
   async updateLink(
     userId: IUser["_id"],
     watchId: IWatch["_id"],
