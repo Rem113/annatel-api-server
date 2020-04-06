@@ -62,13 +62,13 @@ const Geofence = new Schema({
     max: 90.0,
     min: -90.0,
     required: true,
-    type: Schema.Types.Decimal128,
+    type: Schema.Types.Number,
   },
   longitude: {
     max: 180.0,
     min: -180.0,
     required: true,
-    type: Schema.Types.Decimal128,
+    type: Schema.Types.Number,
   },
   name: {
     required: true,
@@ -80,7 +80,7 @@ const Geofence = new Schema({
   },
   radius: {
     required: true,
-    type: Schema.Types.Decimal128,
+    type: Schema.Types.Number,
   },
   stopped: {
     default: false,
