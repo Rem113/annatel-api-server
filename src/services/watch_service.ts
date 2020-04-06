@@ -58,14 +58,14 @@ export default class WatchService {
 
   async linkWatchToUser(
     userId: IUser["_id"],
-    watchId: IWatch["_id"],
+    watchId: IWatch["watchId"],
     name: string
   ): Promise<Either<Failure, ILink>> {
     if (name === undefined || name.trim().length === 0)
       return Either.left(new InvalidInputFailure("Please enter a name"));
 
     // Checks if watch exists
-    const watch = await this.watchRepository.getWatchById(watchId);
+    const watch = await this.watchRepository.getWatchByWatchId(watchId);
 
     if (watch === null)
       return Either.left(
@@ -75,7 +75,11 @@ export default class WatchService {
       );
 
     try {
-      const link = await this.linkRepository.createLink(userId, watchId, name);
+      const link = await this.linkRepository.createLink(
+        userId,
+        watch.watchId,
+        name
+      );
       return Either.right(link);
     } catch (e) {
       return Either.left(
