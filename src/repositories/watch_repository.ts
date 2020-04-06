@@ -34,8 +34,6 @@ export default class WatchRepository {
     const res: IWatch[] = [];
 
     for await (const link of links) {
-      if (link.stopped) continue;
-
       // TODO: Catch exceptions
       const temp = await this.watchModel.findById(link.watch).exec();
 
