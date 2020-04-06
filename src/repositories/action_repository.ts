@@ -28,12 +28,11 @@ export default class ActionRepository {
     return this.actionModel.find({ actionType }).exec();
   }
 
-  async getActionsByWatchId(watchId: IWatch["_id"]): Promise<IAction[]> {
-    // TODO: Catch exceptions
-    const watch = await this.watchModel.findOne({ watchId });
+  async getActionsByWatch(watchId: IWatch["_id"]): Promise<IAction[]> {
+    const watch = await this.watchModel.findOne({ _id: watchId });
 
     if (watch === null) throw "There is no watch associated to this id";
 
-    return this.actionModel.find({ watchId: watch._id });
+    return this.actionModel.find({ watchId });
   }
 }

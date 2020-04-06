@@ -1,51 +1,60 @@
+import { Either } from "monet";
+
+import { Failure, UnauthorizedFailure } from "../core/failures";
 import { IAction, ActionType } from "../models/action.model";
 import { IUser } from "../models/user.model";
+import { IWatch } from "../models/watch.model";
+
 import ActionRepository from "../repositories/action_repository";
-import WatchRepository from "../repositories/watch_repository";
+import LinkRepository from "../repositories/link_repository";
 
 export default class ActionService {
   actionRepository: ActionRepository;
-  watchRepository: WatchRepository;
+  linkRepository: LinkRepository;
 
   constructor(
     actionRepository: ActionRepository,
-    watchRepository: WatchRepository
+    linkRepository: LinkRepository
   ) {
     this.actionRepository = actionRepository;
-    this.watchRepository = watchRepository;
+    this.linkRepository = linkRepository;
   }
 
-  async getActionsByUserId(userId: IUser["_id"]): Promise<IAction[]> {
-    const watches = await this.watchRepository.getUsersWatches(userId);
+  async getActionsForWatch(
+    userId: IUser["_id"],
+    watchId: IWatch["_id"]
+  ): Promise<Either<Failure, IAction[]>> {
+    const link = await this.linkRepository.findLink(userId, watchId);
 
-    const res: IAction[] = [];
-
-    for await (const watch of watches) {
-      const actions = await this.actionRepository.getActionsByWatchId(
-        watch.watchId
+    if (link === null)
+      return Either.left(
+        new UnauthorizedFailure("You are not linked to the specified watch")
       );
 
-      actions.forEach((action) => res.push(action));
-    }
-
-    return res;
+    return Either.right(await this.actionRepository.getActionsByWatch(watchId));
   }
 
   async getActionsAfterDate(
     date: Date,
-    userId: IUser["_id"]
-  ): Promise<IAction[]> {
-    const actions = await this.getActionsByUserId(userId);
+    userId: IUser["_id"],
+    watchId: IWatch["_id"]
+  ): Promise<Either<Failure, IAction[]>> {
+    const actions = await this.getActionsForWatch(userId, watchId);
 
-    return actions.filter((action) => action.insertedAt > date);
+    return actions.map((actions) =>
+      actions.filter((action) => action.insertedAt > date)
+    );
   }
 
   async getActionsByType(
     actionType: ActionType,
-    userId: IUser["_id"]
-  ): Promise<IAction[]> {
-    const actions = await this.getActionsByUserId(userId);
+    userId: IUser["_id"],
+    watchId: IWatch["_id"]
+  ): Promise<Either<Failure, IAction[]>> {
+    const actions = await this.getActionsForWatch(userId, watchId);
 
-    return actions.filter((action) => action.actionType === actionType);
+    return actions.map((actions) =>
+      actions.filter((action) => action.actionType === actionType)
+    );
   }
 }
