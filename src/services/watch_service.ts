@@ -77,7 +77,7 @@ export default class WatchService {
     try {
       const link = await this.linkRepository.createLink(
         userId,
-        watch.watchId,
+        watch._id,
         name
       );
       return Either.right(link);

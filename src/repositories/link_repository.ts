@@ -13,9 +13,8 @@ export default class LinkRepository {
 
   async createLink(userId: IUser["_id"], watchId: IWatch["_id"], name: string) {
     const link = { user: userId, watch: watchId };
-    // TODO: Catch exceptions
-    const exists = await this.linkModel.findOne(link).exec();
 
+    const exists = await this.linkModel.findOne(link).exec();
     if (exists) throw "The link already exists";
 
     return this.linkModel.create({ ...link, name });
@@ -25,7 +24,6 @@ export default class LinkRepository {
     userId: IUser["_id"],
     watchId: IWatch["_id"]
   ): Promise<ILink | null> {
-    // TODO: Catch exceptions
     return this.linkModel.findOne({ user: userId, watch: watchId }).exec();
   }
 
@@ -36,7 +34,6 @@ export default class LinkRepository {
   ): Promise<ILink> {
     value.updatedAt = new Date();
 
-    // TODO: Catch exceptions
     await this.linkModel
       .updateOne({ user: userId, watch: watchId }, value)
       .exec();
